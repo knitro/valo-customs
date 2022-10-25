@@ -6,7 +6,7 @@ import { getFirestore } from "firebase/firestore";
 /*Initialisation*/
 ////////////////////////////////////////////////////////
 
-const firebaseConfig = {
+export const firebaseConfig = {
   apiKey: "AIzaSyA9CIrjr_jZ4b9l3J7wIUox8r_yeAE-_98",
   authDomain: "valorant-map-picker.firebaseapp.com",
   projectId: "valorant-map-picker",
