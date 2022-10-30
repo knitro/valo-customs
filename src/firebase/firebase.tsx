@@ -13,6 +13,8 @@ export const firebaseConfig = {
   storageBucket: "valorant-map-picker.appspot.com",
   messagingSenderId: "200165159456",
   appId: "1:200165159456:web:7a17173149ca0ef076c245",
+  databaseURL:
+    "https://valorant-map-picker-default-rtdb.asia-southeast1.firebasedatabase.app",
 };
 
 const firebaseApp: FirebaseApp = initializeApp(firebaseConfig);

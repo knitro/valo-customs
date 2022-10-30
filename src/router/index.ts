@@ -5,6 +5,7 @@ import RandomView from "@/views/RandomView.vue";
 import BestOfOneView from "@/views/BestOfOneView.vue";
 import BestOfThreeView from "@/views/BestOfThreeView.vue";
 import OnlineView from "@/views/OnlineView.vue";
+import OnlineFailView from "@/views/OnlineFailView.vue";
 import OnlinePickBanView from "@/views/OnlinePickBanView.vue";
 import LoginView from "@/views/LoginView.vue";
 import { auth } from "@/firebase/firebase";
@@ -49,27 +50,26 @@ const routes: Array<RouteConfig> = [
     },
   },
   {
+    path: "/online-fail",
+    name: "onlineFail",
+    component: OnlineFailView,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
     path: "/online/:id",
     name: "onlinePickBan",
     component: OnlinePickBanView,
     meta: {
       requiresAuth: true,
     },
+    props: true,
   },
 ];
 
 const router = new VueRouter({
   routes,
-});
-
-// Check for Login Status
-let isLoggedIn = false;
-auth.onAuthStateChanged(function (user) {
-  if (user) {
-    isLoggedIn = true;
-  } else {
-    isLoggedIn = false;
-  }
 });
 
 // Router Guard for Authentication
