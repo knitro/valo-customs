@@ -73,15 +73,31 @@
         </v-row>
       </v-container>
     </div>
+    <v-overlay :z-index="0" :value="showJoinLoadingOverlay">
+      <v-card class="mx-auto" max-width="500" loading>
+        <v-img
+          src="https://cdn.vuetifyjs.com/images/cards/forest-art.jpg"
+        ></v-img>
+        <v-card-title>Waiting to Join Game...</v-card-title>
+
+        <v-card-text>
+          You have requested to join <b>{{ opponentsName }}</b
+          >'s game. Please wait as they choose to either accept or decline your
+          request.
+        </v-card-text>
+      </v-card>
+    </v-overlay>
   </div>
 </template>
-ye
 
 <script lang="ts">
 import {
   createOnlineSeries,
+  getOnlineSeriesListener,
   requestJoinSeries,
 } from "@/firebase/database/database";
+import { Series, SeriesUser } from "@/firebase/database/database-interfaces";
+import { auth } from "@/firebase/firebase";
 import Vue from "vue";
 
 export default Vue.extend({
@@ -105,6 +121,8 @@ export default Vue.extend({
         teamNameCount: (value: string) =>
           value.length <= 20 || "Max 20 characters",
       },
+      showJoinLoadingOverlay: false,
+      opponentsName: "",
     };
   },
   methods: {
@@ -122,25 +140,57 @@ export default Vue.extend({
       }
     },
     joinButtonPress() {
-      console.log("Press");
       this.isJoining = true;
       if (this.joinCodeValid && this.teamName.length <= 20) {
         requestJoinSeries(this.joinCode, this.teamName).then(
-          (isRequestSuccess: boolean) => {
+          async (isRequestSuccess: boolean) => {
             console.log("passed" + isRequestSuccess);
             if (isRequestSuccess) {
-              // TODO:: Make popup on this view to say waiting. Opponent Name: ___ \n Join Code: __
-              // this.$router.push({
-              //   name: "onlinePickBan",
-              //   params: { id: this.joinCode },
-              // });
+              this.showJoinLoadingOverlay = true;
+              const updater = (a: Series) => {
+                if (a === null || a === undefined) {
+                  return;
+                }
+                this.opponentsName = a.t1.name;
+                const selfSeriesUser: SeriesUser = {
+                  id: auth.currentUser ? auth.currentUser.uid : "",
+                  name: this.teamName,
+                };
+                if (a.t2 && a.t2.id === selfSeriesUser.id) {
+                  this.$router.push({
+                    name: "onlinePickBan",
+                    params: { id: this.joinCode },
+                  });
+                  return;
+                }
+                if (
+                  !this.checkIfRequestsIncludeCurrent(
+                    a.requests,
+                    selfSeriesUser
+                  )
+                ) {
+                  console.log("not contained");
+                  this.showJoinLoadingOverlay = false;
+                  this.isJoining = false;
+                  unsubscribe();
+                }
+              };
+              const accessDenied = () => {
+                console.log("access denied");
+                this.showJoinLoadingOverlay = false;
+                this.isJoining = false;
+              };
+              const unsubscribe = await getOnlineSeriesListener(
+                this.joinCode,
+                updater,
+                accessDenied
+              );
             } else {
               this.isJoining = false;
             }
           }
         );
       } else {
-        console.log("invalid");
         this.isJoining = false;
       }
     },
@@ -151,6 +201,21 @@ export default Vue.extend({
       } else {
         this.joinCodeValid = false;
       }
+    },
+    checkIfRequestsIncludeCurrent(
+      requests: SeriesUser[],
+      current: SeriesUser
+    ): boolean {
+      if (requests === null || requests === undefined) {
+        return false;
+      }
+      let output = false;
+      requests.forEach((value: SeriesUser) => {
+        if (current.id === value.id) {
+          output = true;
+        }
+      });
+      return output;
     },
   },
 });

@@ -34,15 +34,11 @@
                     ></v-list-item-title>
                   </v-list-item-content>
 
-                  <v-list-item-icon>
-                    <v-icon color="deep-purple accent-4">
-                      mdi-message-outline
-                    </v-icon>
+                  <v-list-item-icon @click="acceptRequest(request)">
+                    <v-icon color="green"> mdi-check </v-icon>
                   </v-list-item-icon>
-                  <v-list-item-icon>
-                    <v-icon color="deep-purple accent-4">
-                      mdi-message-outline
-                    </v-icon>
+                  <v-list-item-icon @click="declineRequest(request)">
+                    <v-icon color="red"> mdi-close </v-icon>
                   </v-list-item-icon>
                 </v-list-item>
               </v-list>
@@ -55,7 +51,10 @@
 </template>
 
 <script lang="ts">
-import { getOnlineSeriesListener } from "@/firebase/database/database";
+import {
+  getOnlineSeriesListener,
+  updateRequestsOnlineSeries,
+} from "@/firebase/database/database";
 import { Series, SeriesUser } from "@/firebase/database/database-interfaces";
 import Vue from "vue";
 import {
@@ -91,6 +90,26 @@ export default Vue.extend({
     };
   },
   methods: {
+    acceptRequest(request: SeriesUser) {
+      if (this.currentSeries) {
+        const updatedRequests = this.currentSeries.requests;
+        const indexOfRequest = updatedRequests.indexOf(request);
+        updatedRequests.splice(indexOfRequest, 1);
+        updateRequestsOnlineSeries(
+          this.currentSeries.code,
+          updatedRequests,
+          request
+        );
+      }
+    },
+    declineRequest(request: SeriesUser) {
+      if (this.currentSeries) {
+        const updatedRequests = this.currentSeries.requests;
+        const indexOfRequest = updatedRequests.indexOf(request);
+        updatedRequests.splice(indexOfRequest, 1);
+        updateRequestsOnlineSeries(this.currentSeries.code, updatedRequests);
+      }
+    },
     getSeries() {
       const updater = (a: Series) => {
         this.currentSeries = a;

@@ -6,6 +6,7 @@ import {
   serverTimestamp,
   set,
   update,
+  Unsubscribe,
 } from "firebase/database";
 import { auth, db } from "../firebase";
 import { Series, SeriesFirebaseSend, SeriesUser } from "./database-interfaces";
@@ -103,13 +104,13 @@ export async function requestJoinSeries(
  * @param updater - function that is called when new data is retrieved
  * @param accessDenied - function that is called when there is no data at location or access is forbidden
  */
-export function getOnlineSeriesListener(
+export async function getOnlineSeriesListener(
   joinCode: string,
   updater: (a: Series) => void,
   accessDenied: () => void
-) {
+): Promise<Unsubscribe> {
   const dbRef = ref(db, `series/${joinCode}`);
-  onValue(dbRef, (snapshot) => {
+  const unsubscribeFunction = onValue(dbRef, (snapshot) => {
     if (snapshot.val()) {
       const data: Series = snapshot.val() as Series;
       if (snapshot.key) {
@@ -121,6 +122,50 @@ export function getOnlineSeriesListener(
       accessDenied();
     }
   });
+  return unsubscribeFunction;
+}
+
+/**
+ * Update the Series on the Database based upon parameters provided.
+ * This should be used by the OnlinePickBanView to accept/decline users.
+ * @param joinCode - Join Code
+ * @param updatedRequests - The Updated Requests
+ * @param acceptedSeriesUser - only put in if team is accepted
+ * @returns
+ */
+export function updateRequestsOnlineSeries(
+  joinCode: string,
+  updatedRequests: SeriesUser[],
+  acceptedSeriesUser?: SeriesUser
+): Promise<boolean> {
+  const dbRef = ref(db, `series/${joinCode}`);
+
+  if (acceptedSeriesUser) {
+    return update(dbRef, {
+      requests: updatedRequests,
+      t2: acceptedSeriesUser,
+    })
+      .then(() => {
+        // Data saved successfully!
+        return true;
+      })
+      .catch((error) => {
+        // The write failed...
+        return false;
+      });
+  } else {
+    return update(dbRef, {
+      requests: updatedRequests,
+    })
+      .then(() => {
+        // Data saved successfully!
+        return true;
+      })
+      .catch((error) => {
+        // The write failed...
+        return false;
+      });
+  }
 }
 
 ////////////////////////////////////////////////////////
