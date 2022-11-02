@@ -7,6 +7,7 @@ export interface PickBanItem {
   data: PickBanData;
   status: PickBanMapStatus;
   side: PickBanTeamSide;
+  index: number; // For Online Storage
 }
 
 export enum PickBanTeamSide {

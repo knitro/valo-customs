@@ -168,6 +168,27 @@ export function updateRequestsOnlineSeries(
   }
 }
 
+export async function updateMapSelectionOnlineSeries(
+  joinCode: string,
+  updatedMapSelections: number[],
+  updatedSides: number[]
+): Promise<boolean> {
+  const dbRef = ref(db, `series/${joinCode}`);
+
+  return update(dbRef, {
+    order: updatedMapSelections,
+    sides: updatedSides,
+  })
+    .then(() => {
+      // Data saved successfully!
+      return true;
+    })
+    .catch((error) => {
+      // The write failed...
+      return false;
+    });
+}
+
 ////////////////////////////////////////////////////////
 // Supporting Functions
 ////////////////////////////////////////////////////////

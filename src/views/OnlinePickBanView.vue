@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="online-view-pick-ban-center">
+    <div class="online-view-pick-ban-center" v-if="!isGaming">
       <v-card class="mx-auto" max-width="344" :loading="waitingForOpponent">
         <v-img
           src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
@@ -47,10 +47,21 @@
         </v-expand-transition>
       </v-card>
     </div>
+    <div v-if="isGaming">
+      <pick-ban-selector-online
+        :items="maps"
+        :background="backgroundImage"
+        :isBo1="!currentSeries?.isBo3"
+        :teamOneName="currentSeries?.t1?.name"
+        :teamTwoName="currentSeries?.t2?.name"
+        :id="id"
+      ></pick-ban-selector-online>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
+import { COMP_MAPS, DEFAULT_BACKGROUND } from "@/data/map-data";
 import {
   getOnlineSeriesListener,
   updateRequestsOnlineSeries,
@@ -66,6 +77,7 @@ import {
   VDivider,
   VCardText,
 } from "vuetify/lib";
+import PickBanSelectorOnline from "@/components/PickBan/PickBanSelectorOnline.vue";
 
 export default Vue.extend({
   name: "OnlinePickBanView",
@@ -78,6 +90,7 @@ export default Vue.extend({
     VExpandTransition,
     VDivider,
     VCardText,
+    PickBanSelectorOnline,
   },
   props: {
     id: String,
@@ -87,6 +100,11 @@ export default Vue.extend({
       currentSeries: null as Series | null,
       waitingForOpponent: true,
       showListOfRequestedOpponents: false,
+      isGaming: false,
+      unsubscribeFunction: () => undefined,
+
+      maps: COMP_MAPS,
+      backgroundImage: DEFAULT_BACKGROUND,
     };
   },
   methods: {
@@ -100,6 +118,7 @@ export default Vue.extend({
           updatedRequests,
           request
         );
+        this.unsubscribeFunction();
       }
     },
     declineRequest(request: SeriesUser) {
@@ -110,14 +129,21 @@ export default Vue.extend({
         updateRequestsOnlineSeries(this.currentSeries.code, updatedRequests);
       }
     },
-    getSeries() {
+    async getSeries() {
       const updater = (a: Series) => {
         this.currentSeries = a;
+        if (this.currentSeries.t2) {
+          this.isGaming = true;
+        }
       };
       const accessDenied = () => {
         this.$router.push({ name: "onlineFail" });
       };
-      getOnlineSeriesListener(this.id, updater, accessDenied);
+      this.unsubscribeFunction = await getOnlineSeriesListener(
+        this.id,
+        updater,
+        accessDenied
+      );
     },
   },
   mounted() {

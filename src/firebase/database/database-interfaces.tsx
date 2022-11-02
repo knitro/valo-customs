@@ -7,7 +7,7 @@ export interface Series {
   t2: SeriesUser; // Team 2 Name
   isBo3: boolean; // Bo3 or Bo1
   order: number[]; // The order of maps chosen (Num 1-7 representing maps, eg. 1=1st map alphabetically)
-  sides: boolean[]; // Whether team 1 is on Attacker side = true. Size of array depends on bo1 or bo3
+  sides: number[]; // Team 1 Attacking = 1, Team 2 Attacking = 2, Not selected = 3, N/A = 0
   requests: SeriesUser[];
 }
 
