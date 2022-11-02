@@ -57,7 +57,7 @@
                 v-if="pickBanSelections.length < 1"
                 :height="cardHeightPickBan"
                 :width="cardWidthPickBan"
-                :label="teamOne + ' to Ban'"
+                :label="teamOneName + ' to Ban'"
               ></pick-ban-card-blank>
               <pick-ban-card
                 v-if="pickBanSelections.length >= 1"
@@ -83,7 +83,7 @@
                 v-if="pickBanSelections.length < 2"
                 :height="cardHeightPickBan"
                 :width="cardWidthPickBan"
-                :label="teamTwo + ' to Ban'"
+                :label="teamTwoName + ' to Ban'"
               ></pick-ban-card-blank>
               <pick-ban-card
                 v-if="pickBanSelections.length >= 2"
@@ -111,7 +111,7 @@
                 v-if="pickBanSelections.length < 3"
                 :height="cardHeightPickBan"
                 :width="cardWidthPickBan"
-                :label="teamOne + ' to ' + (isBo1 ? 'Ban' : 'Pick')"
+                :label="teamOneName + ' to ' + (isBo1 ? 'Ban' : 'Pick')"
               ></pick-ban-card-blank>
               <pick-ban-card
                 v-if="pickBanSelections.length >= 3"
@@ -137,7 +137,7 @@
                 v-if="pickBanSelections.length < 4"
                 :height="cardHeightPickBan"
                 :width="cardWidthPickBan"
-                :label="teamTwo + ' to ' + (isBo1 ? 'Ban' : 'Pick')"
+                :label="teamTwoName + ' to ' + (isBo1 ? 'Ban' : 'Pick')"
               ></pick-ban-card-blank>
               <pick-ban-card
                 v-if="pickBanSelections.length >= 4"
@@ -165,7 +165,7 @@
                 v-if="pickBanSelections.length < 5"
                 :height="cardHeightPickBan"
                 :width="cardWidthPickBan"
-                :label="teamOne + ' to Ban'"
+                :label="teamOneName + ' to Ban'"
               ></pick-ban-card-blank>
               <pick-ban-card
                 v-if="pickBanSelections.length >= 5"
@@ -191,7 +191,7 @@
                 v-if="pickBanSelections.length < 6"
                 :height="cardHeightPickBan"
                 :width="cardWidthPickBan"
-                :label="teamTwo + ' to Ban'"
+                :label="teamTwoName + ' to Ban'"
               ></pick-ban-card-blank>
               <pick-ban-card
                 v-if="pickBanSelections.length >= 6"
@@ -283,7 +283,7 @@
         <v-card>
           <v-card-title class="text-h5">Choose the Starting Side</v-card-title>
           <v-card-text>
-            Map Selected by {{ teamOne }} is
+            Map Selected by {{ teamOneName }} is
             {{
               pickBanSelections.length >= 1
                 ? pickBanSelections[pickBanSelections.length - 1].data.label
@@ -376,14 +376,17 @@ export default Vue.extend({
     };
   },
   data() {
-    const maps: PickBanItem[] = this.items.map((item: PickBanData) => {
-      const returnItem: PickBanItem = {
-        data: item,
-        status: PickBanMapStatus.UNSELECTED,
-        side: PickBanTeamSide.NOT_APPLICABLE,
-      };
-      return returnItem;
-    });
+    const maps: PickBanItem[] = this.items.map(
+      (item: PickBanData, index: number) => {
+        const returnItem: PickBanItem = {
+          data: item,
+          status: PickBanMapStatus.UNSELECTED,
+          side: PickBanTeamSide.NOT_APPLICABLE,
+          index: index,
+        };
+        return returnItem;
+      }
+    );
 
     return {
       cardHeightSelect: 100,
