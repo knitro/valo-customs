@@ -32,7 +32,12 @@ export default Vue.extend({
 
 <style scoped lang="scss">
 .background {
-  background: rgb(40, 7, 76, 0.9);
+  background: rgb(67, 0, 91);
+  background: radial-gradient(
+    circle,
+    rgba(67, 0, 91, 0.6) 0%,
+    rgba(40, 7, 76, 0.8) 100%
+  );
   vertical-align: middle;
   text-align: center;
   position: relative;
