@@ -1,22 +1,20 @@
 <template>
-  <v-card :maxHeight="height" :max-width="width">
-    <v-img :height="height" :width="width" :src="backgroundImageUrl">
-      <div
-        :id="'pick-ban-card-div-' + label + '-' + id"
-        :class="cardHighlightClass"
-      >
-        <v-card-title class="pick-ban-card-top-left">{{
-          pickBanLabel
-        }}</v-card-title>
-        <v-card-title class="pick-ban-card-bottom-left">{{
-          teamSideString
-        }}</v-card-title>
-        <v-card-title class="pick-ban-card-bottom-right">{{
-          label
-        }}</v-card-title>
-      </div>
-    </v-img>
-  </v-card>
+  <v-img :height="height" :width="width" :src="backgroundImageUrl">
+    <div
+      :id="'pick-ban-card-div-' + label + '-' + id"
+      :class="cardHighlightClass"
+    > 
+      <v-card-title class="pick-ban-card-top-left">{{
+        pickBanLabel
+      }}</v-card-title>
+      <v-card-title class="pick-ban-card-bottom-left">{{
+        teamSideString
+      }}</v-card-title>
+      <v-card-title class="pick-ban-card-bottom-right">{{
+        label
+      }}</v-card-title>
+    </div>
+  </v-img>
 </template>
 
 <script lang="ts">

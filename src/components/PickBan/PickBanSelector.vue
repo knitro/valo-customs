@@ -10,237 +10,66 @@
       ></v-img>
     </Transition>
     <v-row>
-      <v-col cols="4">
-        <!-- <v-slide-x-transition>
-          <v-card
-            :minHeight="cardHeightSelect"
-            :minWidth="cardWidthSelect"
-            :maxHeight="cardHeightSelect"
-            :max-width="cardWidthSelect"
-            color="rgba(0,0,0,0.5)"
-            class="pick-ban-selector-header-card-spacer"
-          >
-            <v-card-title class="pick-ban-selector-card-label-large">
-              {{ currentTeamToPick }} to pick
-            </v-card-title>
-          </v-card>
-        </v-slide-x-transition> -->
-
-        <div
-          v-for="(map, index) in maps"
-          v-bind:key="index + '-' + map.side + '-' + map.status"
-        >
+      <v-col cols="3">
+        <v-card :height="windowHeight" class="lhs-column">
           <v-slide-x-transition>
-            <pick-ban-card
-              v-show="!pickBanSelections.includes(map)"
-              :id="'choose-card-' + index"
+            <v-card
               :height="cardHeightSelect"
               :width="cardWidthSelect"
-              :label="map.data.label"
-              :background-image-url="map.data.image"
-              :status="map.status"
-              :teamSide="map.side"
-              class="pick-ban-selector-spacer"
-              @click.native="clickMap(map)"
-              :key="
-                'choose-' + map.data.label + '-' + map.side + '-' + map.status
-              "
-            ></pick-ban-card>
+              color="rgba(0,0,0,0.5)"
+            >
+              <v-card-title class="pick-ban-selector-card-label-large">
+                <v-icon
+                  :color="isBan() ? 'red' : 'green'"
+                  x-large
+                  class="title-icon"
+                  >{{
+                    isBan()
+                      ? "mdi-cancel"
+                      : "mdi-selection-ellipse-arrow-inside"
+                  }}
+                </v-icon>
+                {{ isTeamOneTurn() ? teamOneName : teamTwoName }} to
+                {{ isBan() ? "Ban" : "Pick" }}
+                <v-icon
+                  :color="isBan() ? 'red' : 'green'"
+                  x-large
+                  class="title-icon"
+                  >{{
+                    isBan()
+                      ? "mdi-cancel"
+                      : "mdi-selection-ellipse-arrow-inside"
+                  }}
+                </v-icon>
+              </v-card-title>
+            </v-card>
           </v-slide-x-transition>
-        </div>
+
+          <div
+            v-for="(map, index) in maps"
+            v-bind:key="index + '-' + map.side + '-' + map.status"
+          >
+            <v-slide-x-transition>
+              <pick-ban-card
+                v-show="!pickBanSelections.includes(map)"
+                :id="'choose-card-' + index"
+                :height="cardHeightSelect"
+                :width="cardWidthSelect"
+                :label="map.data.label"
+                :background-image-url="map.data.image"
+                :status="map.status"
+                :teamSide="map.side"
+                @click.native="clickMap(map)"
+                :key="
+                  'choose-' + map.data.label + '-' + map.side + '-' + map.status
+                "
+              ></pick-ban-card>
+            </v-slide-x-transition>
+          </div>
+        </v-card>
       </v-col>
-      <v-col cols="8">
+      <v-col cols="6">
         <v-container>
-          <v-row>
-            <v-col align="right" justify="center">
-              <pick-ban-card-blank
-                v-if="pickBanSelections.length < 1"
-                :height="cardHeightPickBan"
-                :width="cardWidthPickBan"
-                :label="teamOneName + ' to Ban'"
-              ></pick-ban-card-blank>
-              <pick-ban-card
-                v-if="pickBanSelections.length >= 1"
-                id="select-card-1"
-                :height="cardHeightPickBan"
-                :width="cardWidthPickBan"
-                :label="pickBanSelections[0].data.label"
-                :background-image-url="pickBanSelections[0].data.image"
-                :status="pickBanSelections[0].status"
-                :teamSide="pickBanSelections[0].side"
-                :key="
-                  'select-' +
-                  pickBanSelections[0].data.label +
-                  '-' +
-                  pickBanSelections[0].side +
-                  '-' +
-                  pickBanSelections[0].status
-                "
-              ></pick-ban-card>
-            </v-col>
-            <v-col align="left" justify="center">
-              <pick-ban-card-blank
-                v-if="pickBanSelections.length < 2"
-                :height="cardHeightPickBan"
-                :width="cardWidthPickBan"
-                :label="teamTwoName + ' to Ban'"
-              ></pick-ban-card-blank>
-              <pick-ban-card
-                v-if="pickBanSelections.length >= 2"
-                id="select-card-2"
-                :height="cardHeightPickBan"
-                :width="cardWidthPickBan"
-                :label="pickBanSelections[1].data.label"
-                :background-image-url="pickBanSelections[1].data.image"
-                :status="pickBanSelections[1].status"
-                :teamSide="pickBanSelections[1].side"
-                :key="
-                  'select-' +
-                  pickBanSelections[1].data.label +
-                  '-' +
-                  pickBanSelections[1].side +
-                  '-' +
-                  pickBanSelections[1].status
-                "
-              ></pick-ban-card>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col align="right" justify="center">
-              <pick-ban-card-blank
-                v-if="pickBanSelections.length < 3"
-                :height="cardHeightPickBan"
-                :width="cardWidthPickBan"
-                :label="teamOneName + ' to ' + (isBo1 ? 'Ban' : 'Pick')"
-              ></pick-ban-card-blank>
-              <pick-ban-card
-                v-if="pickBanSelections.length >= 3"
-                id="select-card-3"
-                :height="cardHeightPickBan"
-                :width="cardWidthPickBan"
-                :label="pickBanSelections[2].data.label"
-                :background-image-url="pickBanSelections[2].data.image"
-                :status="pickBanSelections[2].status"
-                :teamSide="pickBanSelections[2].side"
-                :key="
-                  'select-' +
-                  pickBanSelections[2].data.label +
-                  '-' +
-                  pickBanSelections[2].side +
-                  '-' +
-                  pickBanSelections[2].status
-                "
-              ></pick-ban-card>
-            </v-col>
-            <v-col align="left" justify="center">
-              <pick-ban-card-blank
-                v-if="pickBanSelections.length < 4"
-                :height="cardHeightPickBan"
-                :width="cardWidthPickBan"
-                :label="teamTwoName + ' to ' + (isBo1 ? 'Ban' : 'Pick')"
-              ></pick-ban-card-blank>
-              <pick-ban-card
-                v-if="pickBanSelections.length >= 4"
-                id="select-card-4"
-                :height="cardHeightPickBan"
-                :width="cardWidthPickBan"
-                :label="pickBanSelections[3].data.label"
-                :background-image-url="pickBanSelections[3].data.image"
-                :status="pickBanSelections[3].status"
-                :teamSide="pickBanSelections[3].side"
-                :key="
-                  'select-' +
-                  pickBanSelections[3].data.label +
-                  '-' +
-                  pickBanSelections[3].side +
-                  '-' +
-                  pickBanSelections[3].status
-                "
-              ></pick-ban-card>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col align="right" justify="center">
-              <pick-ban-card-blank
-                v-if="pickBanSelections.length < 5"
-                :height="cardHeightPickBan"
-                :width="cardWidthPickBan"
-                :label="teamOneName + ' to Ban'"
-              ></pick-ban-card-blank>
-              <pick-ban-card
-                v-if="pickBanSelections.length >= 5"
-                id="select-card-5"
-                :height="cardHeightPickBan"
-                :width="cardWidthPickBan"
-                :label="pickBanSelections[4].data.label"
-                :background-image-url="pickBanSelections[4].data.image"
-                :status="pickBanSelections[4].status"
-                :teamSide="pickBanSelections[4].side"
-                :key="
-                  'select-' +
-                  pickBanSelections[4].data.label +
-                  '-' +
-                  pickBanSelections[4].side +
-                  '-' +
-                  pickBanSelections[4].status
-                "
-              ></pick-ban-card>
-            </v-col>
-            <v-col align="left" justify="center">
-              <pick-ban-card-blank
-                v-if="pickBanSelections.length < 6"
-                :height="cardHeightPickBan"
-                :width="cardWidthPickBan"
-                :label="teamTwoName + ' to Ban'"
-              ></pick-ban-card-blank>
-              <pick-ban-card
-                v-if="pickBanSelections.length >= 6"
-                id="select-card-6"
-                :height="cardHeightPickBan"
-                :width="cardWidthPickBan"
-                :label="pickBanSelections[5].data.label"
-                :background-image-url="pickBanSelections[5].data.image"
-                :status="pickBanSelections[5].status"
-                :teamSide="pickBanSelections[5].side"
-                :key="
-                  'select-' +
-                  pickBanSelections[5].data.label +
-                  '-' +
-                  pickBanSelections[5].side +
-                  '-' +
-                  pickBanSelections[5].status
-                "
-              ></pick-ban-card>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col align="center" justify="center">
-              <pick-ban-card-blank
-                v-if="pickBanSelections.length < 7"
-                :height="cardHeightPickBan"
-                :width="cardWidthPickBan"
-                :label="'Remaining Map'"
-              ></pick-ban-card-blank>
-              <pick-ban-card
-                v-if="pickBanSelections.length >= 7"
-                id="select-card-7"
-                :height="cardHeightPickBan"
-                :width="cardWidthPickBan"
-                :label="pickBanSelections[6].data.label"
-                :background-image-url="pickBanSelections[6].data.image"
-                :status="pickBanSelections[6].status"
-                :teamSide="pickBanSelections[6].side"
-                :key="
-                  'select-' +
-                  pickBanSelections[6].data.label +
-                  '-' +
-                  pickBanSelections[6].side +
-                  '-' +
-                  pickBanSelections[6].status
-                "
-              ></pick-ban-card>
-            </v-col>
-          </v-row>
           <div class="pick-ban-selector-button-area">
             <v-btn
               x-large
@@ -275,6 +104,178 @@
             </v-btn>
           </div>
         </v-container>
+      </v-col>
+      <v-col cols="3">
+        <v-card :height="windowHeight" class="rhs-column">
+          <pick-ban-card-blank
+            v-if="pickBanSelections.length < 1"
+            :height="cardHeightPickBan"
+            :width="cardWidthPickBan"
+            :label="teamOneName + ' to Ban'"
+          ></pick-ban-card-blank>
+          <pick-ban-card
+            v-if="pickBanSelections.length >= 1"
+            id="select-card-1"
+            :height="cardHeightPickBan"
+            :width="cardWidthPickBan"
+            :label="pickBanSelections[0].data.label"
+            :background-image-url="pickBanSelections[0].data.image"
+            :status="pickBanSelections[0].status"
+            :teamSide="pickBanSelections[0].side"
+            :key="
+              'select-' +
+              pickBanSelections[0].data.label +
+              '-' +
+              pickBanSelections[0].side +
+              '-' +
+              pickBanSelections[0].status
+            "
+          ></pick-ban-card>
+          <pick-ban-card-blank
+            v-if="pickBanSelections.length < 2"
+            :height="cardHeightPickBan"
+            :width="cardWidthPickBan"
+            :label="teamTwoName + ' to Ban'"
+          ></pick-ban-card-blank>
+          <pick-ban-card
+            v-if="pickBanSelections.length >= 2"
+            id="select-card-2"
+            :height="cardHeightPickBan"
+            :width="cardWidthPickBan"
+            :label="pickBanSelections[1].data.label"
+            :background-image-url="pickBanSelections[1].data.image"
+            :status="pickBanSelections[1].status"
+            :teamSide="pickBanSelections[1].side"
+            :key="
+              'select-' +
+              pickBanSelections[1].data.label +
+              '-' +
+              pickBanSelections[1].side +
+              '-' +
+              pickBanSelections[1].status
+            "
+          ></pick-ban-card>
+          <pick-ban-card-blank
+            v-if="pickBanSelections.length < 3"
+            :height="cardHeightPickBan"
+            :width="cardWidthPickBan"
+            :label="teamOneName + ' to ' + (isBo1 ? 'Ban' : 'Pick')"
+          ></pick-ban-card-blank>
+          <pick-ban-card
+            v-if="pickBanSelections.length >= 3"
+            id="select-card-3"
+            :height="cardHeightPickBan"
+            :width="cardWidthPickBan"
+            :label="pickBanSelections[2].data.label"
+            :background-image-url="pickBanSelections[2].data.image"
+            :status="pickBanSelections[2].status"
+            :teamSide="pickBanSelections[2].side"
+            :key="
+              'select-' +
+              pickBanSelections[2].data.label +
+              '-' +
+              pickBanSelections[2].side +
+              '-' +
+              pickBanSelections[2].status
+            "
+          ></pick-ban-card>
+          <pick-ban-card-blank
+            v-if="pickBanSelections.length < 4"
+            :height="cardHeightPickBan"
+            :width="cardWidthPickBan"
+            :label="teamTwoName + ' to ' + (isBo1 ? 'Ban' : 'Pick')"
+          ></pick-ban-card-blank>
+          <pick-ban-card
+            v-if="pickBanSelections.length >= 4"
+            id="select-card-4"
+            :height="cardHeightPickBan"
+            :width="cardWidthPickBan"
+            :label="pickBanSelections[3].data.label"
+            :background-image-url="pickBanSelections[3].data.image"
+            :status="pickBanSelections[3].status"
+            :teamSide="pickBanSelections[3].side"
+            :key="
+              'select-' +
+              pickBanSelections[3].data.label +
+              '-' +
+              pickBanSelections[3].side +
+              '-' +
+              pickBanSelections[3].status
+            "
+          ></pick-ban-card>
+          <pick-ban-card-blank
+            v-if="pickBanSelections.length < 5"
+            :height="cardHeightPickBan"
+            :width="cardWidthPickBan"
+            :label="teamOneName + ' to Ban'"
+          ></pick-ban-card-blank>
+          <pick-ban-card
+            v-if="pickBanSelections.length >= 5"
+            id="select-card-5"
+            :height="cardHeightPickBan"
+            :width="cardWidthPickBan"
+            :label="pickBanSelections[4].data.label"
+            :background-image-url="pickBanSelections[4].data.image"
+            :status="pickBanSelections[4].status"
+            :teamSide="pickBanSelections[4].side"
+            :key="
+              'select-' +
+              pickBanSelections[4].data.label +
+              '-' +
+              pickBanSelections[4].side +
+              '-' +
+              pickBanSelections[4].status
+            "
+          ></pick-ban-card>
+          <pick-ban-card-blank
+            v-if="pickBanSelections.length < 6"
+            :height="cardHeightPickBan"
+            :width="cardWidthPickBan"
+            :label="teamTwoName + ' to Ban'"
+          ></pick-ban-card-blank>
+          <pick-ban-card
+            v-if="pickBanSelections.length >= 6"
+            id="select-card-6"
+            :height="cardHeightPickBan"
+            :width="cardWidthPickBan"
+            :label="pickBanSelections[5].data.label"
+            :background-image-url="pickBanSelections[5].data.image"
+            :status="pickBanSelections[5].status"
+            :teamSide="pickBanSelections[5].side"
+            :key="
+              'select-' +
+              pickBanSelections[5].data.label +
+              '-' +
+              pickBanSelections[5].side +
+              '-' +
+              pickBanSelections[5].status
+            "
+          ></pick-ban-card>
+          <pick-ban-card-blank
+            v-if="pickBanSelections.length < 7"
+            :height="cardHeightPickBan"
+            :width="cardWidthPickBan"
+            :label="'Remaining Map'"
+          ></pick-ban-card-blank>
+          <pick-ban-card
+            v-if="pickBanSelections.length >= 7"
+            id="select-card-7"
+            :height="cardHeightPickBan"
+            :width="cardWidthPickBan"
+            :label="pickBanSelections[6].data.label"
+            :background-image-url="pickBanSelections[6].data.image"
+            :status="pickBanSelections[6].status"
+            :teamSide="pickBanSelections[6].side"
+            :key="
+              'select-' +
+              pickBanSelections[6].data.label +
+              '-' +
+              pickBanSelections[6].side +
+              '-' +
+              pickBanSelections[6].status
+            "
+          ></pick-ban-card>
+        </v-card>
       </v-col>
     </v-row>
 
@@ -317,6 +318,21 @@
 import { PropType } from "node_modules/vue/types/v3-component-props";
 import Vue from "vue";
 import {
+  VIcon,
+  VImg,
+  VRow,
+  VCol,
+  VCard,
+  VSlideXTransition,
+  VCardTitle,
+  VContainer,
+  VBtn,
+  VDialog,
+  VCardText,
+  VCardActions,
+  VSpacer,
+} from "vuetify/lib";
+import {
   PickBanData,
   PickBanItem,
   PickBanMapStatus,
@@ -329,6 +345,19 @@ export default Vue.extend({
   components: {
     PickBanCard,
     PickBanCardBlank,
+    VIcon,
+    VImg,
+    VRow,
+    VCol,
+    VCard,
+    VSlideXTransition,
+    VCardTitle,
+    VContainer,
+    VBtn,
+    VDialog,
+    VCardText,
+    VCardActions,
+    VSpacer,
   },
   name: "PickBanSelector",
   props: {
@@ -393,7 +422,7 @@ export default Vue.extend({
       cardWidthSelect: 500,
 
       cardHeightPickBan: 100,
-      cardWidthPickBan: 300,
+      cardWidthPickBan: 500,
 
       backgroundImage: this.background,
       windowHeight: window.innerHeight,
@@ -402,7 +431,6 @@ export default Vue.extend({
       pickBanSelections: [] as PickBanItem[],
       currentSelected: null as PickBanItem | null,
 
-      currentTeamToPick: "Team 1",
       teamOneName: "Team 1",
       teamTwoName: "Team 2",
 
@@ -539,14 +567,35 @@ export default Vue.extend({
       this.teamSelectCallback(isAttacker);
       this.showTeamSelect = false;
     },
+    isTeamOneTurn(): boolean {
+      const length = this.pickBanSelections.length;
+      if (length === 0 || length === 2 || length === 4 || length === 6) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    isBan(): boolean {
+      const index = this.pickBanSelections.length;
+      if (this.isBo1) {
+        if (index >= this.buttonLabelsBanOrderBo1.length) {
+          return false;
+        }
+        const label = this.buttonLabelsBanOrderBo1[index];
+        return label.toLowerCase() === "ban";
+      } else {
+        if (index >= this.buttonLabelsBanOrderBo3.length) {
+          return false;
+        }
+        const label = this.buttonLabelsBanOrderBo3[index];
+        return label.toLowerCase() === "ban";
+      }
+    },
   },
 });
 </script>
 
 <style scoped lang="scss">
-.pick-ban-selector-header-card-spacer {
-  margin-top: 40px;
-}
 .pick-ban-selector-spacer {
   margin-top: 5px;
 }
@@ -601,8 +650,8 @@ export default Vue.extend({
 .pick-ban-selector-card-label-large {
   display: flow-root;
   padding-top: 35px;
-  font-size: 64px;
-  text-align: right;
+  font-size: 32px;
+  text-align: left;
   color: white;
   text-shadow: 0 0 5px #000000;
 }
@@ -617,5 +666,19 @@ export default Vue.extend({
   position: absolute;
   left: 50%;
   top: 50%;
+}
+
+.lhs-column {
+  background-color: rgba(28, 11, 25, 0.9);
+  border-right: 4px solid gray;
+}
+
+.rhs-column {
+  background-color: rgba(28, 11, 25, 0.9);
+  border-left: 4px solid gray;
+}
+
+.title-icon {
+  vertical-align: text-bottom;
 }
 </style>
