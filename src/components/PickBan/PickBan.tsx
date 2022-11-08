@@ -1,6 +1,7 @@
 export interface PickBanData {
   label: string;
   image: string;
+  minimap: string;
 }
 
 export interface PickBanItem {
