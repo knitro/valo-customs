@@ -3,7 +3,7 @@
     <div
       :id="'pick-ban-card-div-' + label + '-' + id"
       :class="cardHighlightClass"
-    > 
+    >
       <v-card-title class="pick-ban-card-top-left">{{
         pickBanLabel
       }}</v-card-title>
