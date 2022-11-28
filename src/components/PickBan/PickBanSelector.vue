@@ -21,8 +21,12 @@
                 class="team-action-card"
               >
                 <v-card-title class="team-action-card-text">
-                  {{ isTeamOneTurn() ? teamOneName : teamTwoName }} to
-                  {{ isBan() ? "Ban" : "Pick" }}
+                  {{
+                    isComplete
+                      ? "Map Selection Complete"
+                      : (isTeamOneTurn() ? teamOneName : teamTwoName) +
+                        (isBan() ? " to Ban" : " to Pick")
+                  }}
                 </v-card-title>
               </v-card>
             </v-slide-y-transition>
@@ -300,6 +304,8 @@ export default Vue.extend({
       teamSelectCallback: (isAttacker: boolean) => {
         // Empty Function
       },
+
+      isComplete: false,
     };
   },
   methods: {
@@ -414,6 +420,7 @@ export default Vue.extend({
         lastPickBanSelection.status = PickBanMapStatus.PICKED;
         this.currentSelected = null;
         this.showTeamSelect = false;
+        this.isComplete = true;
       };
       this.teamSelectCallback = teamSelectFunction;
       if (this.currentSelected) {
@@ -424,6 +431,7 @@ export default Vue.extend({
     reset() {
       this.currentSelected = null;
       this.pickBanSelections = [];
+      this.isComplete = false;
       this.backgroundImage = this.background;
       this.maps.forEach((currentMap: PickBanItem) => {
         currentMap.status = PickBanMapStatus.UNSELECTED;
