@@ -25,3 +25,14 @@ export enum PickBanMapStatus {
   PICKED = 2, // 2 == Picked,
   BANNED = 3, // 3 == Banned
 }
+
+export const BLANK_PICK_BAN_ITEM: PickBanItem = {
+  data: {
+    label: "",
+    image: "",
+    minimap: "",
+  },
+  status: PickBanMapStatus.UNSELECTED,
+  side: PickBanTeamSide.NOT_APPLICABLE,
+  index: -1,
+};

@@ -7,9 +7,7 @@
       <v-card-title class="pick-ban-card-top-left">{{
         pickBanLabel
       }}</v-card-title>
-      <v-card-title class="pick-ban-card-bottom-left">{{
-        teamSideString
-      }}</v-card-title>
+      <v-card-title class="pick-ban-card-bottom-left"></v-card-title>
       <v-card-title class="pick-ban-card-bottom-right">{{
         label
       }}</v-card-title>
@@ -90,36 +88,9 @@ export default Vue.extend({
       }
     }
 
-    // Establish Label for Team Side
-    let teamSideString = "";
-    let nameOfTeam1 = "Team 1";
-    switch (this.teamSide) {
-      case 0: {
-        teamSideString = nameOfTeam1 + " is Attacking";
-        break;
-      }
-      case 1: {
-        teamSideString = nameOfTeam1 + " is Defending";
-        break;
-      }
-      case 2: {
-        teamSideString = nameOfTeam1 + " is choosing which side to start";
-        break;
-      }
-      case 3: {
-        teamSideString = "";
-        break;
-      }
-      default: {
-        teamSideString = "Error";
-        break;
-      }
-    }
-
     return {
       pickBanLabel: pickBanLabel,
       cardHighlightClass: cardHighlightClass,
-      teamSideString: teamSideString,
     };
   },
   mounted() {
