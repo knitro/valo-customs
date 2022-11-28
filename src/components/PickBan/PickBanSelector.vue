@@ -284,7 +284,7 @@ export default Vue.extend({
     );
     return {
       cardHeightSelect: 100,
-      cardWidthSelect: 500,
+      cardWidthSelect: 400,
 
       cardHeightPickBan: 100,
       cardWidthPickBan: 232,
@@ -420,7 +420,9 @@ export default Vue.extend({
         lastPickBanSelection.status = PickBanMapStatus.PICKED;
         this.currentSelected = null;
         this.showTeamSelect = false;
-        this.isComplete = true;
+        if (this.pickBanSelections.length === 7) {
+          this.isComplete = true;
+        }
       };
       this.teamSelectCallback = teamSelectFunction;
       if (this.currentSelected) {

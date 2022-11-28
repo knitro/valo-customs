@@ -107,64 +107,48 @@ export default Vue.extend({
       topLabel += " to ";
       topLabel += this.isBan ? "Ban" : "Pick";
     }
-
-    // Determine Bottom Label
-    let bottomLabel = this.isTeamOneTurn ? this.teamOneName : this.teamTwoName;
-    switch (this.mapTeamSide) {
-      case PickBanTeamSide.ATTACK_SIDE: {
-        bottomLabel += " to Attack";
-        break;
-      }
-      case PickBanTeamSide.DEFEND_SIDE: {
-        bottomLabel += " to Defend";
-        break;
-      }
-      case PickBanTeamSide.UNSELECTED: {
-        bottomLabel += " is choosing which side to start";
-        break;
-      }
-      case PickBanTeamSide.NOT_APPLICABLE: {
-        bottomLabel = "";
-        break;
-      }
-      default: {
-        bottomLabel = "-";
-        break;
-      }
-    }
-
     return {
       topLabel: topLabel,
-      bottomLabel: bottomLabel,
+      bottomLabel: "",
     };
   },
-  watch: {
-    mapTeamSide: function () {
-      let updatedBottomLabel = this.isTeamOneTurn
-        ? this.teamOneName
-        : this.teamTwoName;
+  mounted() {
+    const updatedBottomLabel = this.updateBottomLabel();
+    this.bottomLabel = updatedBottomLabel;
+  },
+  methods: {
+    updateBottomLabel(): string {
+      let bottomLabel = this.isTeamOneTurn
+        ? this.teamTwoName
+        : this.teamOneName;
       switch (this.mapTeamSide) {
         case PickBanTeamSide.ATTACK_SIDE: {
-          updatedBottomLabel += " to Attack";
+          bottomLabel += " to Defend";
           break;
         }
         case PickBanTeamSide.DEFEND_SIDE: {
-          updatedBottomLabel += " to Defend";
+          bottomLabel += " to Attack";
           break;
         }
         case PickBanTeamSide.UNSELECTED: {
-          updatedBottomLabel += " is choosing which side to start";
+          bottomLabel += " is choosing sides";
           break;
         }
         case PickBanTeamSide.NOT_APPLICABLE: {
-          updatedBottomLabel = "";
+          bottomLabel = "";
           break;
         }
         default: {
-          updatedBottomLabel = "-";
+          bottomLabel = "-";
           break;
         }
       }
+      return bottomLabel;
+    },
+  },
+  watch: {
+    mapTeamSide: function () {
+      const updatedBottomLabel = this.updateBottomLabel();
       this.bottomLabel = updatedBottomLabel;
     },
   },
