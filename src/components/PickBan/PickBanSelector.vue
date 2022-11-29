@@ -1,68 +1,69 @@
 <template>
-  <div>
-    <Transition name="background" :duration="{ enter: 500, leave: 800 }">
-      <v-img
-        class="pick-ban-selector-background"
-        :src="backgroundImage"
-        :key="backgroundImage"
-        :min-height="windowHeight - 64"
-        :max-height="windowHeight - 64"
-      ></v-img>
-    </Transition>
-    <v-row>
-      <v-col cols="12">
-        <v-container>
-          <v-row align="center" justify="center">
-            <v-slide-y-transition>
-              <v-card
-                :height="80"
-                :width="700"
-                :color="isBan() ? 'rgba(255,0,0,0.5)' : 'rgba(0,255,0,0.3)'"
-                class="team-action-card"
-              >
-                <v-card-title class="team-action-card-text">
-                  {{
-                    isComplete
-                      ? "Map Selection Complete"
-                      : (isTeamOneTurn() ? teamOneName : teamTwoName) +
-                        (isBan() ? " to Ban" : " to Pick")
-                  }}
-                </v-card-title>
-              </v-card>
-            </v-slide-y-transition>
-          </v-row>
-          <v-row align="center" justify="center">
-            <div
-              v-for="(map, index) in maps"
-              v-bind:key="index + '-' + map.side + '-' + map.status"
-            >
-              <v-slide-x-transition>
-                <v-card class="selection-card">
-                  <pick-ban-card
-                    v-show="!pickBanSelections.includes(map)"
-                    class="pick-ban-selector-spacer"
-                    :id="'choose-card-' + index"
-                    :height="cardHeightSelect"
-                    :width="cardWidthSelect"
-                    :label="map.data.label"
-                    :background-image-url="map.data.image"
-                    :status="map.status"
-                    :teamSide="map.side"
-                    @click.native="clickMap(map)"
-                    :key="
-                      'choose-' +
-                      map.data.label +
-                      '-' +
-                      map.side +
-                      '-' +
-                      map.status
-                    "
-                  ></pick-ban-card>
+  <div class="body">
+    <div class="main-content">
+      <Transition name="background" :duration="{ enter: 500, leave: 800 }">
+        <v-img
+          class="pick-ban-selector-background"
+          :src="backgroundImage"
+          :key="backgroundImage"
+          :min-height="windowHeight - 64"
+          :max-height="windowHeight - 64"
+        ></v-img>
+      </Transition>
+      <v-row>
+        <v-col cols="12">
+          <v-container>
+            <v-row align="center" justify="center">
+              <v-slide-y-transition>
+                <v-card
+                  :height="80"
+                  :width="700"
+                  :color="isBan() ? 'rgba(255,0,0,0.5)' : 'rgba(0,255,0,0.3)'"
+                  class="team-action-card"
+                >
+                  <v-card-title class="team-action-card-text">
+                    {{
+                      isComplete
+                        ? "Map Selection Complete"
+                        : (isTeamOneTurn() ? teamOneName : teamTwoName) +
+                          (isBan() ? " to Ban" : " to Pick")
+                    }}
+                  </v-card-title>
                 </v-card>
-              </v-slide-x-transition>
-            </div>
-          </v-row>
-          <!-- <v-row align="center" justify="center">
+              </v-slide-y-transition>
+            </v-row>
+            <v-row align="center" justify="center">
+              <div
+                v-for="(map, index) in maps"
+                v-bind:key="index + '-' + map.side + '-' + map.status"
+              >
+                <v-slide-x-transition>
+                  <v-card class="selection-card">
+                    <pick-ban-card
+                      v-show="!pickBanSelections.includes(map)"
+                      class="pick-ban-selector-spacer"
+                      :id="'choose-card-' + index"
+                      :height="cardHeightSelect"
+                      :width="cardWidthSelect"
+                      :label="map.data.label"
+                      :background-image-url="map.data.image"
+                      :status="map.status"
+                      :teamSide="map.side"
+                      @click.native="clickMap(map)"
+                      :key="
+                        'choose-' +
+                        map.data.label +
+                        '-' +
+                        map.side +
+                        '-' +
+                        map.status
+                      "
+                    ></pick-ban-card>
+                  </v-card>
+                </v-slide-x-transition>
+              </div>
+            </v-row>
+            <!-- <v-row align="center" justify="center">
             <v-img
               contain
               :src="minimapImage"
@@ -73,11 +74,46 @@
             >
             </v-img>
           </v-row> -->
-        </v-container>
-      </v-col>
-      <v-col cols="3"></v-col>
-    </v-row>
+          </v-container>
+        </v-col>
+        <v-col cols="3"></v-col>
+      </v-row>
 
+      <div class="pick-ban-selector-center">
+        <v-dialog v-model="showTeamSelect" persistent max-width="500">
+          <v-card>
+            <v-card-title class="text-h5"
+              >Choose the Starting Side</v-card-title
+            >
+            <v-card-text>
+              Map Selected by {{ teamOneName }} is
+              {{
+                pickBanSelections.length >= 1
+                  ? pickBanSelections[pickBanSelections.length - 1].data.label
+                  : ""
+              }}
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn
+                color="red darken-1"
+                text
+                @click="teamSideSelectedPress(true)"
+              >
+                Attacker
+              </v-btn>
+              <v-btn
+                color="green darken-1"
+                text
+                @click="teamSideSelectedPress(false)"
+              >
+                Defender
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </div>
+    </div>
     <div class="bottom-area">
       <v-container>
         <v-row no-gutters justify="center">
@@ -142,39 +178,6 @@
           </v-col>
         </v-row>
       </v-container>
-    </div>
-
-    <div class="pick-ban-selector-center">
-      <v-dialog v-model="showTeamSelect" persistent max-width="500">
-        <v-card>
-          <v-card-title class="text-h5">Choose the Starting Side</v-card-title>
-          <v-card-text>
-            Map Selected by {{ teamOneName }} is
-            {{
-              pickBanSelections.length >= 1
-                ? pickBanSelections[pickBanSelections.length - 1].data.label
-                : ""
-            }}
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn
-              color="red darken-1"
-              text
-              @click="teamSideSelectedPress(true)"
-            >
-              Attacker
-            </v-btn>
-            <v-btn
-              color="green darken-1"
-              text
-              @click="teamSideSelectedPress(false)"
-            >
-              Defender
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
     </div>
   </div>
 </template>
@@ -282,15 +285,30 @@ export default Vue.extend({
         return returnItem;
       }
     );
+
+    // Get Window Height
+    // See: https://stackoverflow.com/questions/1145850/how-to-get-height-of-entire-document-with-javascript
+    const body = document.body;
+    const html = document.documentElement;
+    const pageHeight = Math.max(
+      body.scrollHeight,
+      body.offsetHeight,
+      html.clientHeight,
+      html.scrollHeight,
+      html.offsetHeight
+    );
+
     return {
       cardHeightSelect: 100,
       cardWidthSelect: 400,
 
       cardHeightPickBan: 100,
-      cardWidthPickBan: 232,
+      cardWidthPickBan: 200,
 
       backgroundImage: this.background,
-      windowHeight: window.innerHeight,
+      // windowHeight: window.innerHeight,
+      // windowHeight: document.body.scrollHeight,
+      windowHeight: pageHeight,
       minimapImage: "",
 
       maps: maps,
@@ -477,10 +495,19 @@ export default Vue.extend({
 </script>
 
 <style scoped lang="scss">
+.body {
+  min-height: calc(100vh - 64px);
+  display: flex;
+  flex-direction: column;
+}
+.main-content {
+  flex: 1 0 auto;
+}
+
 .bottom-area {
-  position: absolute;
-  bottom: 0;
+  flex-shrink: 0;
   width: 100%;
+  z-index: 1; // Needs to be greater than background
 }
 
 .bottom-bar {
@@ -546,11 +573,6 @@ export default Vue.extend({
   position: absolute;
   top: 80px;
   right: 10px;
-}
-
-.pick-ban-selector-button-area {
-  // position: fixed;
-  // bottom: 50px;
 }
 
 .pick-ban-selector-card-label-large {
