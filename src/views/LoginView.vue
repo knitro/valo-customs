@@ -33,12 +33,12 @@ import "firebaseui/dist/firebaseui.css";
 
 // Compat Firebase Initialisation used for FirebaseUI
 import { firebaseConfig } from "@/firebase/firebase";
-firebase.initializeApp(firebaseConfig);
 
 export default Vue.extend({
   name: "LoginView",
   components: {},
   setup() {
+    firebase.initializeApp(firebaseConfig);
     var uiConfig = {
       signInFlow: "popup",
       signInSuccessUrl: "#/online",
