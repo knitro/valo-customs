@@ -205,7 +205,6 @@ import {
   PickBanItem,
   PickBanMapStatus,
   PickBanTeamSide,
-  BLANK_PICK_BAN_ITEM,
 } from "./PickBan";
 import PickBanCard from "./PickBanCard.vue";
 import PickBanSelectionDisplay from "./PickBanSelectionDisplay.vue";
@@ -270,7 +269,6 @@ export default Vue.extend({
         "Ban",
         "Pick",
       ],
-      blankPickBanItem: BLANK_PICK_BAN_ITEM, // This is purely for type safety
     };
   },
   data() {
@@ -336,6 +334,7 @@ export default Vue.extend({
       });
       return returnValue;
     },
+
     clickMap(map: PickBanItem) {
       const wasSelectedPreviously = map === this.currentSelected;
       this.currentSelected = null;
@@ -357,6 +356,7 @@ export default Vue.extend({
         this.minimapImage = "";
       }
     },
+
     selectMap() {
       if (this.currentSelected == null) {
         return;
@@ -417,6 +417,7 @@ export default Vue.extend({
 
       this.currentSelected = null;
     },
+
     pickTeamSide(isTeamOneToPick: boolean) {
       // Bring up Team Selection Card
       const teamSelectFunction = (isAttacker: boolean) => {
@@ -448,6 +449,7 @@ export default Vue.extend({
       }
       this.showTeamSelect = true;
     },
+
     reset() {
       this.currentSelected = null;
       this.pickBanSelections = [];
@@ -458,10 +460,12 @@ export default Vue.extend({
         currentMap.side = PickBanTeamSide.NOT_APPLICABLE;
       });
     },
+
     teamSideSelectedPress(isAttacker: boolean) {
       this.teamSelectCallback(isAttacker);
       this.showTeamSelect = false;
     },
+
     isTeamOneTurn(providedIndex?: number): boolean {
       const length = providedIndex
         ? providedIndex
@@ -472,6 +476,7 @@ export default Vue.extend({
         return false;
       }
     },
+
     isBan(providedIndex?: number): boolean {
       const index = providedIndex
         ? providedIndex
@@ -495,6 +500,9 @@ export default Vue.extend({
 </script>
 
 <style scoped lang="scss">
+///////////////////////////////////////////////
+// Page Layout Styles
+///////////////////////////////////////////////
 .body {
   min-height: calc(100vh - 64px);
   display: flex;
@@ -519,9 +527,18 @@ export default Vue.extend({
   margin: auto;
 }
 
-.pick-ban-selector-spacer {
-  margin-top: 5px;
+///////////////////////////////////////////////
+// General Styles
+///////////////////////////////////////////////
+
+.transparent-background {
+  background: rgba(0, 0, 0, 0);
 }
+
+///////////////////////////////////////////////
+// Background
+///////////////////////////////////////////////
+
 .pick-ban-selector-background {
   position: absolute;
   top: 0;
@@ -544,42 +561,20 @@ export default Vue.extend({
   opacity: 0;
 }
 
-.filter-fab-enter-active,
-.filter-fab-leave-active {
-  transition: all 0.25s ease-out;
+///////////////////////////////////////////////
+// Top Bar Styles
+///////////////////////////////////////////////
+
+.team-action-card {
+  margin-top: 10px;
+  margin-bottom: 20px;
 }
 
-.minimap-enter-from,
-.minimap-leave-to {
-  opacity: 0;
-}
-
-.filter-fab-enter-active,
-.filter-fab-leave-active {
-  transition: all 0.25s ease-out;
-}
-
-.filter-fab-enter-from {
-  opacity: 0;
-  transform: translateY(30px);
-}
-
-.filter-fab-leave-to {
-  opacity: 0;
-  transform: translateY(-30px);
-}
-
-#pick-ban-selector-filters {
-  position: absolute;
-  top: 80px;
-  right: 10px;
-}
-
-.pick-ban-selector-card-label-large {
+.team-action-card-text {
   display: flow-root;
-  padding-top: 35px;
+  padding-top: 24px;
   font-size: 32px;
-  text-align: left;
+  text-align: center;
   color: white;
   text-shadow: 0 0 5px #000000;
 }
@@ -596,51 +591,24 @@ export default Vue.extend({
   top: 50%;
 }
 
-.lhs-column {
-  background-color: rgba(0, 0, 0, 0);
+///////////////////////////////////////////////
+// Selection Card Styles
+///////////////////////////////////////////////
+
+.selection-card {
+  margin: 5px;
 }
 
-.rhs-column {
-  background-color: rgba(28, 11, 25, 0.9);
-  border-left: 4px solid gray;
-  border-bottom: 4px solid gray;
-}
+///////////////////////////////////////////////
+// Minimap
+///////////////////////////////////////////////
 
-.title-icon {
-  vertical-align: text-bottom;
-}
-
-.lhs-column-header-text {
-  display: flow-root;
-  padding-top: 24px;
-  font-size: 28px;
-  text-align: left;
-  color: white;
-  text-shadow: 0 0 5px #000000;
-}
-.team-action-card {
-  margin-top: 10px;
-  margin-bottom: 20px;
-}
-
-.team-action-card-text {
-  display: flow-root;
-  padding-top: 24px;
-  font-size: 32px;
-  text-align: center;
-  color: white;
-  text-shadow: 0 0 5px #000000;
-}
-
-.transparent-background {
-  background: rgba(0, 0, 0, 0);
+.minimap-enter-from,
+.minimap-leave-to {
+  opacity: 0;
 }
 
 .minimap-image {
   margin-top: 48px;
-}
-
-.selection-card {
-  margin: 5px;
 }
 </style>
