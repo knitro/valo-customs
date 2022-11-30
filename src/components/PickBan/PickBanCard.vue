@@ -1,22 +1,18 @@
 <template>
-  <v-card :maxHeight="height" :max-width="width">
-    <v-img :height="height" :width="width" :src="backgroundImageUrl">
-      <div
-        :id="'pick-ban-card-div-' + label + '-' + id"
-        :class="cardHighlightClass"
-      >
-        <v-card-title class="pick-ban-card-top-left">{{
-          pickBanLabel
-        }}</v-card-title>
-        <v-card-title class="pick-ban-card-bottom-left">{{
-          teamSideString
-        }}</v-card-title>
-        <v-card-title class="pick-ban-card-bottom-right">{{
-          label
-        }}</v-card-title>
-      </div>
-    </v-img>
-  </v-card>
+  <v-img :height="height" :width="width" :src="backgroundImageUrl">
+    <div
+      :id="'pick-ban-card-div-' + label + '-' + id"
+      :class="cardHighlightClass"
+    >
+      <v-card-title class="pick-ban-card-top-left">{{
+        pickBanLabel
+      }}</v-card-title>
+      <v-card-title class="pick-ban-card-bottom-left"></v-card-title>
+      <v-card-title class="pick-ban-card-bottom-right">{{
+        label
+      }}</v-card-title>
+    </div>
+  </v-img>
 </template>
 
 <script lang="ts">
@@ -92,36 +88,9 @@ export default Vue.extend({
       }
     }
 
-    // Establish Label for Team Side
-    let teamSideString = "";
-    let nameOfTeam1 = "Team 1";
-    switch (this.teamSide) {
-      case 0: {
-        teamSideString = nameOfTeam1 + " is Attacking";
-        break;
-      }
-      case 1: {
-        teamSideString = nameOfTeam1 + " is Defending";
-        break;
-      }
-      case 2: {
-        teamSideString = nameOfTeam1 + " is choosing which side to start";
-        break;
-      }
-      case 3: {
-        teamSideString = "";
-        break;
-      }
-      default: {
-        teamSideString = "Error";
-        break;
-      }
-    }
-
     return {
       pickBanLabel: pickBanLabel,
       cardHighlightClass: cardHighlightClass,
-      teamSideString: teamSideString,
     };
   },
   mounted() {

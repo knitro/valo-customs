@@ -1,12 +1,14 @@
 export interface PickBanData {
   label: string;
   image: string;
+  minimap: string;
 }
 
 export interface PickBanItem {
   data: PickBanData;
   status: PickBanMapStatus;
   side: PickBanTeamSide;
+  index: number; // For Online Storage
 }
 
 export enum PickBanTeamSide {
@@ -23,3 +25,14 @@ export enum PickBanMapStatus {
   PICKED = 2, // 2 == Picked,
   BANNED = 3, // 3 == Banned
 }
+
+export const BLANK_PICK_BAN_ITEM: PickBanItem = {
+  data: {
+    label: "",
+    image: "",
+    minimap: "",
+  },
+  status: PickBanMapStatus.UNSELECTED,
+  side: PickBanTeamSide.NOT_APPLICABLE,
+  index: -1,
+};

@@ -137,18 +137,6 @@
               }}
               {{ currentSelected ? currentSelected.data.label : "Map" }}
             </v-btn>
-            <v-btn
-              x-large
-              color="deep-purple"
-              dark
-              class="pick-ban-selector-bottom-button"
-              :min-height="70"
-              :max-height="70"
-              v-show="pickBanSelections.length == 7"
-              @click="reset()"
-            >
-              Reset
-            </v-btn>
           </div>
         </v-row>
       </v-container>
@@ -183,23 +171,14 @@
 </template>
 
 <script lang="ts">
+import {
+  getOnlineSeriesListener,
+  updateMapSelectionOnlineSeries,
+} from "@/firebase/database/database";
+import { Series } from "@/firebase/database/database-interfaces";
+import { auth } from "@/firebase/firebase";
 import { PropType } from "node_modules/vue/types/v3-component-props";
 import Vue from "vue";
-import {
-  VIcon,
-  VImg,
-  VRow,
-  VCol,
-  VCard,
-  VSlideXTransition,
-  VCardTitle,
-  VContainer,
-  VBtn,
-  VDialog,
-  VCardText,
-  VCardActions,
-  VSpacer,
-} from "vuetify/lib";
 import {
   PickBanData,
   PickBanItem,
@@ -213,29 +192,9 @@ export default Vue.extend({
   components: {
     PickBanCard,
     PickBanSelectionDisplay,
-    VImg,
-    VRow,
-    VCol,
-    VCard,
-    VSlideXTransition,
-    VCardTitle,
-    VContainer,
-    VBtn,
-    VDialog,
-    VCardText,
-    VCardActions,
-    VSpacer,
   },
-  name: "PickBanSelector",
+  name: "PickBanSelectorOnline",
   props: {
-    width: {
-      type: Number,
-      required: true,
-    },
-    height: {
-      type: Number,
-      required: true,
-    },
     items: {
       type: Array as PropType<PickBanData[]>, // use PropType
       default: () => [], // use a factory function
@@ -246,6 +205,18 @@ export default Vue.extend({
     },
     isBo1: {
       type: Boolean,
+      required: true,
+    },
+    teamOneName: {
+      type: String,
+      required: true,
+    },
+    teamTwoName: {
+      type: String,
+      required: true,
+    },
+    id: {
+      type: String,
       required: true,
     },
   },
@@ -272,18 +243,6 @@ export default Vue.extend({
     };
   },
   data() {
-    const maps: PickBanItem[] = this.items.map(
-      (item: PickBanData, index: number) => {
-        const returnItem: PickBanItem = {
-          data: item,
-          status: PickBanMapStatus.UNSELECTED,
-          side: PickBanTeamSide.NOT_APPLICABLE,
-          index: index,
-        };
-        return returnItem;
-      }
-    );
-
     // Get Window Height
     // See: https://stackoverflow.com/questions/1145850/how-to-get-height-of-entire-document-with-javascript
     const body = document.body;
@@ -304,18 +263,14 @@ export default Vue.extend({
       cardWidthPickBan: 200,
 
       backgroundImage: this.background,
-      // windowHeight: window.innerHeight,
-      // windowHeight: document.body.scrollHeight,
       windowHeight: pageHeight,
       minimapImage: "",
 
-      maps: maps,
+      maps: [] as PickBanItem[],
       pickBanSelections: [] as PickBanItem[],
       currentSelected: null as PickBanItem | null,
 
-      teamOneName: "Team 1",
-      teamTwoName: "Team 2",
-
+      series: null as Series | null,
       showTeamSelect: false,
       teamSelectCallback: (isAttacker: boolean) => {
         // Empty Function
@@ -336,6 +291,11 @@ export default Vue.extend({
     },
 
     clickMap(map: PickBanItem) {
+      // Stop if it is not current player's turn
+      if (!this.isAbleToSelect()) {
+        return;
+      }
+
       const wasSelectedPreviously = map === this.currentSelected;
       this.currentSelected = null;
 
@@ -358,9 +318,15 @@ export default Vue.extend({
     },
 
     selectMap() {
+      // Stop if it is not current player's turn
+      if (!this.isAbleToSelect()) {
+        return;
+      }
+
       if (this.currentSelected == null) {
         return;
       }
+
       this.pickBanSelections.push(this.currentSelected);
 
       if (this.isBo1) {
@@ -414,8 +380,43 @@ export default Vue.extend({
           }
         }
       }
-
       this.currentSelected = null;
+      this.updateMapSelectionForDatabase();
+    },
+
+    updateMapSelectionForDatabase() {
+      const mapSelections = [] as number[];
+      const sides = [] as number[];
+      this.pickBanSelections.forEach((current: PickBanItem) => {
+        mapSelections.push(current.index);
+        switch (current.side) {
+          case PickBanTeamSide.ATTACK_SIDE: {
+            sides.push(0);
+            break;
+          }
+          case PickBanTeamSide.DEFEND_SIDE: {
+            sides.push(1);
+            break;
+          }
+          case PickBanTeamSide.UNSELECTED: {
+            sides.push(2);
+            break;
+          }
+          case PickBanTeamSide.NOT_APPLICABLE: {
+            sides.push(3);
+            break;
+          }
+          default: {
+            sides.push(-1);
+            break;
+          }
+        }
+      });
+      if (this.series) {
+        updateMapSelectionOnlineSeries(this.series.code, mapSelections, sides);
+      } else {
+        console.log("Error, Series is Null");
+      }
     },
 
     pickTeamSide(isTeamOneToPick: boolean) {
@@ -430,7 +431,7 @@ export default Vue.extend({
 
         // Flip if this is team 2 selection
         if (!isTeamOneToPick) {
-          if (lastPickBanSelection.side == PickBanTeamSide.ATTACK_SIDE) {
+          if (lastPickBanSelection.side === PickBanTeamSide.ATTACK_SIDE) {
             lastPickBanSelection.side = PickBanTeamSide.DEFEND_SIDE;
           } else {
             lastPickBanSelection.side = PickBanTeamSide.ATTACK_SIDE;
@@ -442,6 +443,7 @@ export default Vue.extend({
         if (this.pickBanSelections.length === 7) {
           this.isComplete = true;
         }
+        this.updateMapSelectionForDatabase();
       };
       this.teamSelectCallback = teamSelectFunction;
       if (this.currentSelected) {
@@ -450,30 +452,49 @@ export default Vue.extend({
       this.showTeamSelect = true;
     },
 
-    reset() {
-      this.currentSelected = null;
-      this.pickBanSelections = [];
-      this.isComplete = false;
-      this.backgroundImage = this.background;
-      this.maps.forEach((currentMap: PickBanItem) => {
-        currentMap.status = PickBanMapStatus.UNSELECTED;
-        currentMap.side = PickBanTeamSide.NOT_APPLICABLE;
-      });
-    },
-
     teamSideSelectedPress(isAttacker: boolean) {
       this.teamSelectCallback(isAttacker);
       this.showTeamSelect = false;
     },
 
-    isTeamOneTurn(providedIndex?: number): boolean {
-      const length = providedIndex
-        ? providedIndex
-        : this.pickBanSelections.length;
-      if (length === 0 || length === 2 || length === 4 || length === 6) {
+    isAbleToSelect(): boolean {
+      const isTeamOneTurn = this.isTeamOneTurn();
+      const isTeamOnePlayer = auth.currentUser?.uid === this.series?.t1.id;
+      const isTeamTwoPlayer = auth.currentUser?.uid === this.series?.t2.id;
+      if (isTeamOneTurn && isTeamOnePlayer) {
+        return true;
+      } else if (!isTeamOneTurn && isTeamTwoPlayer) {
         return true;
       } else {
         return false;
+      }
+    },
+
+    isTeamOneTurn(providedIndex?: number): boolean {
+      // Future Sight Determination
+      if (providedIndex) {
+        const length = providedIndex;
+        if (length === 0 || length === 2 || length === 4 || length === 6) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+
+      // Current Deliberation
+      if (this.series) {
+        if (this.series?.order) {
+          const length = this.series.order.length;
+          if (length === 0 || length === 2 || length === 4 || length === 6) {
+            return true;
+          } else {
+            return false;
+          }
+        } else {
+          return true; // Null value in storage ==> length
+        }
+      } else {
+        return false; // Error State
       }
     },
 
@@ -495,6 +516,88 @@ export default Vue.extend({
         return label.toLowerCase() === "ban";
       }
     },
+
+    async getSeries() {
+      const updater = (a: Series) => {
+        this.series = a;
+        this.updateMapInformation();
+      };
+      const accessDenied = () => {
+        this.$router.push({ name: "onlineFail" });
+      };
+      getOnlineSeriesListener(this.id, updater, accessDenied);
+    },
+    updateMapInformation() {
+      // Add Maps and DB information
+      const maps: PickBanItem[] = this.items.map(
+        (item: PickBanData, index: number) => {
+          let currentStatus = PickBanMapStatus.UNSELECTED;
+          let side = PickBanTeamSide.NOT_APPLICABLE;
+          if (this.series?.order && this.series.order.includes(index)) {
+            // Calculate if Map is Banned/Picked
+            const indexOfMapInDatabase = this.series.order.indexOf(index);
+            if (this.isBo1) {
+              if (indexOfMapInDatabase === 6) {
+                currentStatus = PickBanMapStatus.PICKED;
+              } else {
+                currentStatus = PickBanMapStatus.BANNED;
+              }
+            } else {
+              if (
+                indexOfMapInDatabase === 2 ||
+                indexOfMapInDatabase === 3 ||
+                indexOfMapInDatabase === 6
+              ) {
+                currentStatus = PickBanMapStatus.PICKED;
+              } else {
+                currentStatus = PickBanMapStatus.BANNED;
+              }
+            }
+
+            // Calculate Side
+            const sideData = this.series.sides[indexOfMapInDatabase];
+            switch (sideData) {
+              case 0: {
+                side = PickBanTeamSide.ATTACK_SIDE;
+                break;
+              }
+              case 1: {
+                side = PickBanTeamSide.DEFEND_SIDE;
+                break;
+              }
+              case 2: {
+                side = PickBanTeamSide.UNSELECTED;
+                break;
+              }
+              case 3: {
+                side = PickBanTeamSide.NOT_APPLICABLE;
+                break;
+              }
+            }
+          }
+          const returnItem: PickBanItem = {
+            data: item,
+            status: currentStatus,
+            side: side,
+            index: index,
+          };
+          return returnItem;
+        }
+      );
+      this.maps = maps;
+
+      // Update PickBanSelections
+      let pickBanSelections = [] as PickBanItem[];
+      if (this.series?.order) {
+        this.series.order.forEach((index: number) => {
+          pickBanSelections.push(maps[index]);
+        });
+      }
+      this.pickBanSelections = pickBanSelections;
+    },
+  },
+  mounted() {
+    this.getSeries();
   },
 });
 </script>
