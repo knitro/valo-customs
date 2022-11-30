@@ -19,6 +19,11 @@ const routes: Array<RouteConfig> = [
     component: HomeView,
   },
   {
+    path: "/home",
+    name: "home",
+    component: HomeView,
+  },
+  {
     path: "/random",
     name: "random",
     component: RandomView,
