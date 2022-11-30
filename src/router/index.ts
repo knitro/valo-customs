@@ -14,7 +14,7 @@ Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
   {
-    path: "/home",
+    path: "/",
     name: "home",
     component: HomeView,
   },
