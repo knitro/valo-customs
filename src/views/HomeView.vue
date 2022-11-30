@@ -32,19 +32,19 @@ export default Vue.extend({
   data() {
     const homeCardData: HomeCardItem[] = [
       {
-        image: "https://cdn.vuetifyjs.com/images/cards/kitchen.png",
+        image: require("@/assets/images/bottom-stairs.png"),
         header: "Random Map",
         subheader: "Quickly pick a random map",
         link: "/random",
       },
       {
-        image: "https://cdn.vuetifyjs.com/images/cards/kitchen.png",
+        image: require("@/assets/images/top-office.png"),
         header: "Local PickBan",
         subheader: "Find the perfect map for your customs",
         link: "/bestOfOne",
       },
       {
-        image: "https://cdn.vuetifyjs.com/images/cards/kitchen.png",
+        image: require("@/assets/images/distance-land.png"),
         header: "Online",
         subheader: "Use the Pick Ban System with people online",
         link: "/online",

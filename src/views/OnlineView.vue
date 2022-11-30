@@ -1,92 +1,99 @@
 <template>
   <div>
-    <div class="online-view-center">
-      <v-container>
-        <v-row>
-          <v-col>
-            <v-text-field
-              v-model="teamName"
-              outlined
-              height="100"
-              class="online-view-text-input"
-              label="Team Name"
-              hint="This will be seen by your opponent to confirm that they have the right opponent."
-              counter="20"
-              :rules="[rules.required, rules.teamNameCount]"
-            >
-            </v-text-field>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col>
-            <v-card color="#385F73" dark>
-              <v-card-title class="text-h5">Create</v-card-title>
+    <v-img
+      class="login-view-background"
+      :src="backgroundImage"
+      :key="backgroundImage"
+      :min-height="windowHeight - 64"
+      :max-height="windowHeight - 64"
+    >
+      <div class="online-view-center">
+        <v-container>
+          <v-row>
+            <v-col>
+              <v-text-field
+                v-model="teamName"
+                outlined
+                height="100"
+                class="online-view-text-input"
+                label="Team Name"
+                hint="This will be seen by your opponent to confirm that they have the right opponent."
+                counter="20"
+                :rules="[rules.required, rules.teamNameCount]"
+                color="purple"
+              >
+              </v-text-field>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <v-card color="rgb(206, 121, 107)" dark>
+                <v-card-title class="text-h5">Create</v-card-title>
 
-              <v-card-subtitle> Game Settings </v-card-subtitle>
+                <v-card-subtitle> Game Settings </v-card-subtitle>
 
-              <v-card-text>
-                <v-switch
-                  v-model="createBo3Switch"
-                  inset
-                  :label="`Series Type: ${
-                    createBo3Switch ? 'Best of Three' : 'Best of One'
-                  }`"
-                ></v-switch>
-              </v-card-text>
+                <v-card-text>
+                  <v-switch
+                    v-model="createBo3Switch"
+                    inset
+                    :label="`Series Type: ${
+                      createBo3Switch ? 'Best of Three' : 'Best of One'
+                    }`"
+                  ></v-switch>
+                </v-card-text>
 
-              <v-card-actions>
-                <v-btn text @click="createButtonPress" :loading="isCreating">
-                  Create Game
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-col>
-          <v-col>
-            <v-card color="#385F73" dark>
-              <v-card-title class="text-h5">Join</v-card-title>
-              <v-card-subtitle>
-                Enter the code that the opponent has sent you
-              </v-card-subtitle>
-              <v-card-text>
-                <v-text-field
-                  v-model="joinCode"
-                  outlined
-                  label="Join Code"
-                  @input="joinCodeInput"
-                  maxlength="5"
-                  :rules="[rules.required, rules.validJoinCode]"
-                >
-                </v-text-field
-              ></v-card-text>
-              <v-card-actions>
-                <v-btn
-                  text
-                  @disabled="joinCodeValid"
-                  @click="joinButtonPress"
-                  :loading="isJoining"
-                >
-                  Join Game
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-container>
-    </div>
-    <v-overlay :z-index="0" :value="showJoinLoadingOverlay">
-      <v-card class="mx-auto" max-width="500" loading>
-        <v-img
-          src="https://cdn.vuetifyjs.com/images/cards/forest-art.jpg"
-        ></v-img>
-        <v-card-title>Waiting to Join Game...</v-card-title>
+                <v-card-actions>
+                  <v-btn text @click="createButtonPress" :loading="isCreating">
+                    Create Game
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-col>
+            <v-col>
+              <v-card color="rgb(206, 121, 107)" dark>
+                <v-card-title class="text-h5">Join</v-card-title>
+                <v-card-subtitle>
+                  Enter the code that the opponent has sent you
+                </v-card-subtitle>
+                <v-card-text>
+                  <v-text-field
+                    v-model="joinCode"
+                    outlined
+                    label="Join Code"
+                    @input="joinCodeInput"
+                    maxlength="5"
+                    :rules="[rules.required, rules.validJoinCode]"
+                  >
+                  </v-text-field
+                ></v-card-text>
+                <v-card-actions>
+                  <v-btn
+                    text
+                    @disabled="joinCodeValid"
+                    @click="joinButtonPress"
+                    :loading="isJoining"
+                  >
+                    Join Game
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-container>
+      </div>
+      <v-overlay :z-index="0" :value="showJoinLoadingOverlay">
+        <v-card class="mx-auto" max-width="500" loading>
+          <v-img :src="waitingImage"></v-img>
+          <v-card-title>Waiting to Join Game...</v-card-title>
 
-        <v-card-text>
-          You have requested to join <b>{{ opponentsName }}</b
-          >'s game. Please wait as they choose to either accept or decline your
-          request.
-        </v-card-text>
-      </v-card>
-    </v-overlay>
+          <v-card-text>
+            You have requested to join <b>{{ opponentsName }}</b
+            >'s game. Please wait as they choose to either accept or decline
+            your request.
+          </v-card-text>
+        </v-card>
+      </v-overlay>
+    </v-img>
   </div>
 </template>
 
@@ -123,6 +130,10 @@ export default Vue.extend({
       },
       showJoinLoadingOverlay: false,
       opponentsName: "",
+
+      waitingImage: require("@/assets/images/outside.png"),
+      backgroundImage: require("@/assets/backgrounds/range-outside.png"),
+      windowHeight: window.innerHeight,
     };
   },
   methods: {

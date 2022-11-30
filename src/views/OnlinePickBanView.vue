@@ -1,62 +1,67 @@
 <template>
   <div>
-    <div class="online-view-pick-ban-center" v-if="!isGaming">
-      <v-card class="mx-auto" max-width="344" :loading="waitingForOpponent">
-        <v-img
-          src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
-          height="200px"
-        ></v-img>
+    <v-img
+      class="login-view-background"
+      :src="backgroundImage"
+      :key="backgroundImage"
+      :min-height="windowHeight - 64"
+      :max-height="windowHeight - 64"
+    >
+      <div class="online-view-pick-ban-center" v-if="!isGaming">
+        <v-card class="mx-auto" max-width="344" :loading="waitingForOpponent">
+          <v-img :src="waitingImage" height="200px"></v-img>
 
-        <v-card-title> Waiting for your Opponent ... </v-card-title>
+          <v-card-title> Waiting for your Opponent ... </v-card-title>
 
-        <v-card-subtitle>
-          Your code is: <b>{{ id }}</b>
-        </v-card-subtitle>
+          <v-card-subtitle>
+            Your code is: <b>{{ id }}</b>
+          </v-card-subtitle>
 
-        <v-expand-transition>
-          <div
-            v-show="
-              currentSeries?.requests && currentSeries?.requests.length > 0
-            "
-          >
-            <v-divider></v-divider>
-            <v-card-text>
-              <v-list subheader>
-                <v-subheader>Opponent Requests</v-subheader>
+          <v-expand-transition>
+            <div
+              v-show="
+                currentSeries?.requests && currentSeries?.requests.length > 0
+              "
+            >
+              <v-divider></v-divider>
+              <v-card-text>
+                <v-list subheader>
+                  <v-subheader>Opponent Requests</v-subheader>
 
-                <v-list-item
-                  v-for="(request, index) in currentSeries?.requests"
-                  v-bind:key="index + '-' + request.name"
-                >
-                  <v-list-item-content>
-                    <v-list-item-title
-                      v-text="request.name"
-                    ></v-list-item-title>
-                  </v-list-item-content>
+                  <v-list-item
+                    v-for="(request, index) in currentSeries?.requests"
+                    v-bind:key="index + '-' + request.name"
+                  >
+                    <v-list-item-content>
+                      <v-list-item-title
+                        v-text="request.name"
+                      ></v-list-item-title>
+                    </v-list-item-content>
 
-                  <v-list-item-icon @click="acceptRequest(request)">
-                    <v-icon color="green"> mdi-check </v-icon>
-                  </v-list-item-icon>
-                  <v-list-item-icon @click="declineRequest(request)">
-                    <v-icon color="red"> mdi-close </v-icon>
-                  </v-list-item-icon>
-                </v-list-item>
-              </v-list>
-            </v-card-text>
-          </div>
-        </v-expand-transition>
-      </v-card>
-    </div>
-    <div v-if="isGaming">
-      <pick-ban-selector-online
-        :items="maps"
-        :background="backgroundImage"
-        :isBo1="!currentSeries?.isBo3"
-        :teamOneName="currentSeries?.t1?.name"
-        :teamTwoName="currentSeries?.t2?.name"
-        :id="id"
-      ></pick-ban-selector-online>
-    </div>
+                    <v-list-item-icon @click="acceptRequest(request)">
+                      <v-icon color="green"> mdi-check </v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-icon @click="declineRequest(request)">
+                      <v-icon color="red"> mdi-close </v-icon>
+                    </v-list-item-icon>
+                  </v-list-item>
+                </v-list>
+              </v-card-text>
+            </div>
+          </v-expand-transition>
+        </v-card>
+      </div>
+      <div v-if="isGaming">
+        <pick-ban-selector-online
+          :items="maps"
+          :background="backgroundImage"
+          :isBo1="!currentSeries?.isBo3"
+          :teamOneName="currentSeries?.t1?.name"
+          :teamTwoName="currentSeries?.t2?.name"
+          :id="id"
+        ></pick-ban-selector-online>
+      </div>
+    </v-img>
   </div>
 </template>
 
@@ -104,6 +109,8 @@ export default Vue.extend({
       unsubscribeFunction: () => undefined,
 
       maps: COMP_MAPS,
+      windowHeight: window.innerHeight,
+      waitingImage: require("@/assets/images/outhouse.png"),
       backgroundImage: DEFAULT_BACKGROUND,
     };
   },
