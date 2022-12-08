@@ -472,7 +472,7 @@ export default Vue.extend({
 
     isTeamOneTurn(providedIndex?: number): boolean {
       // Future Sight Determination
-      if (providedIndex) {
+      if (providedIndex !== undefined) {
         const length = providedIndex;
         if (length === 0 || length === 2 || length === 4 || length === 6) {
           return true;
