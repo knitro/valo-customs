@@ -594,6 +594,11 @@ export default Vue.extend({
         });
       }
       this.pickBanSelections = pickBanSelections;
+
+      // Check for Completion
+      if (pickBanSelections.length >= 7) {
+        this.isComplete = true;
+      }
     },
   },
   mounted() {
