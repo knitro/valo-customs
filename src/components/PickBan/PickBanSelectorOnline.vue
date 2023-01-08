@@ -341,7 +341,10 @@ export default Vue.extend({
               this.backgroundImage = currentMap.data.image;
             }
           });
-          this.pickTeamSide(false);
+          // this.pickTeamSide(false);
+          if (this.currentSelected) {
+            this.currentSelected.side = PickBanTeamSide.UNSELECTED;
+          }
         }
       } else {
         // Assume Bo3
@@ -364,20 +367,25 @@ export default Vue.extend({
           this.selectMap();
         } else {
           // At this stage, you are dealing with Picking a Map
-          switch (numberOfMapsPickedOrBanned) {
-            case 3: {
-              this.pickTeamSide(false);
-              break;
-            }
-            case 4: {
-              this.pickTeamSide(true);
-              break;
-            }
-            case 7: {
-              this.pickTeamSide(false);
-              break;
-            }
+          this.backgroundImage = this.currentSelected.data.image;
+          if (this.currentSelected) {
+            this.currentSelected.side = PickBanTeamSide.UNSELECTED;
           }
+          // As the opponent will be choosing side, this responsibility is deferred to updateMapInformation Function
+          // switch (numberOfMapsPickedOrBanned) {
+          //   case 3: {
+          //     this.pickTeamSide(false);
+          //     break;
+          //   }
+          //   case 4: {
+          //     this.pickTeamSide(true);
+          //     break;
+          //   }
+          //   case 7: {
+          //     this.pickTeamSide(false);
+          //     break;
+          //   }
+          // }
         }
       }
       this.currentSelected = null;
@@ -606,15 +614,6 @@ export default Vue.extend({
       }
       this.pickBanSelections = pickBanSelections;
 
-      // Check for Completion
-      if (pickBanSelections.length >= 7) {
-        // If last item is still being selected, it is not completed just yet.
-        const lastPickBanItem = pickBanSelections[pickBanSelections.length - 1];
-        if (lastPickBanItem.side !== PickBanTeamSide.UNSELECTED) {
-          this.isComplete = true;
-        }
-      }
-
       // Check if the Choosing Side prompt needs to appear or not for the Current Player
       const lastPickBanItem = pickBanSelections[pickBanSelections.length - 1];
       if (lastPickBanItem.side === PickBanTeamSide.UNSELECTED) {
@@ -624,6 +623,15 @@ export default Vue.extend({
           (!isTeamOnePickingSide && this.isCurrentPlayerTeamTwo())
         ) {
           this.pickTeamSide(isTeamOnePickingSide);
+        }
+      }
+
+      // Check for Completion
+      if (pickBanSelections.length >= 7) {
+        // If last item is still being selected, it is not completed just yet.
+        const lastPickBanItem = pickBanSelections[pickBanSelections.length - 1];
+        if (lastPickBanItem.side !== PickBanTeamSide.UNSELECTED) {
+          this.isComplete = true;
         }
       }
     },
