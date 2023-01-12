@@ -37,7 +37,13 @@ import { firebaseConfig } from "@/firebase/firebase";
 export default Vue.extend({
   name: "LoginView",
   components: {},
-  setup() {
+  data() {
+    return {
+      backgroundImage: require("@/assets/backgrounds/range-portal.png"),
+      windowHeight: window.innerHeight,
+    };
+  },
+  mounted() {
     firebase.initializeApp(firebaseConfig);
     var uiConfig = {
       signInFlow: "popup",
@@ -54,15 +60,12 @@ export default Vue.extend({
     };
 
     // Initialize the FirebaseUI Widget using Firebase.
-    var ui = new firebaseui.auth.AuthUI(firebase.auth());
+    let ui = firebaseui.auth.AuthUI.getInstance();
+    if (!ui) {
+      ui = new firebaseui.auth.AuthUI(firebase.auth());
+    }
     // The start method will wait until the DOM is loaded.
     ui.start("#firebaseui-auth-container", uiConfig);
-  },
-  data() {
-    return {
-      backgroundImage: require("@/assets/backgrounds/range-portal.png"),
-      windowHeight: window.innerHeight,
-    };
   },
 });
 </script>
