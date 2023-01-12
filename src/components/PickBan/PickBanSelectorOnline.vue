@@ -341,7 +341,10 @@ export default Vue.extend({
               this.backgroundImage = currentMap.data.image;
             }
           });
-          this.pickTeamSide(false);
+          // this.pickTeamSide(false);
+          if (this.currentSelected) {
+            this.currentSelected.side = PickBanTeamSide.UNSELECTED;
+          }
         }
       } else {
         // Assume Bo3
@@ -364,20 +367,25 @@ export default Vue.extend({
           this.selectMap();
         } else {
           // At this stage, you are dealing with Picking a Map
-          switch (numberOfMapsPickedOrBanned) {
-            case 3: {
-              this.pickTeamSide(false);
-              break;
-            }
-            case 4: {
-              this.pickTeamSide(true);
-              break;
-            }
-            case 7: {
-              this.pickTeamSide(false);
-              break;
-            }
+          this.backgroundImage = this.currentSelected.data.image;
+          if (this.currentSelected) {
+            this.currentSelected.side = PickBanTeamSide.UNSELECTED;
           }
+          // As the opponent will be choosing side, this responsibility is deferred to updateMapInformation Function
+          // switch (numberOfMapsPickedOrBanned) {
+          //   case 3: {
+          //     this.pickTeamSide(false);
+          //     break;
+          //   }
+          //   case 4: {
+          //     this.pickTeamSide(true);
+          //     break;
+          //   }
+          //   case 7: {
+          //     this.pickTeamSide(false);
+          //     break;
+          //   }
+          // }
         }
       }
       this.currentSelected = null;
@@ -457,6 +465,17 @@ export default Vue.extend({
       this.showTeamSelect = false;
     },
 
+    isCurrentPlayerTeamOne(): boolean {
+      // Note that this should be used in conjunction with isCurrentPlayerTeamTwo() to avoid third parties from choosing
+      const isTeamOnePlayer = auth.currentUser?.uid === this.series?.t1.id;
+      return isTeamOnePlayer;
+    },
+    isCurrentPlayerTeamTwo(): boolean {
+      // Note that this should be used in conjunction with isCurrentPlayerTeamOne() to avoid third parties from choosing
+      const isTeamTwoPlayer = auth.currentUser?.uid === this.series?.t2.id;
+      return isTeamTwoPlayer;
+    },
+
     isAbleToSelect(): boolean {
       const isTeamOneTurn = this.isTeamOneTurn();
       const isTeamOnePlayer = auth.currentUser?.uid === this.series?.t1.id;
@@ -472,7 +491,7 @@ export default Vue.extend({
 
     isTeamOneTurn(providedIndex?: number): boolean {
       // Future Sight Determination
-      if (providedIndex) {
+      if (providedIndex !== undefined) {
         const length = providedIndex;
         if (length === 0 || length === 2 || length === 4 || length === 6) {
           return true;
@@ -594,6 +613,27 @@ export default Vue.extend({
         });
       }
       this.pickBanSelections = pickBanSelections;
+
+      // Check if the Choosing Side prompt needs to appear or not for the Current Player
+      const lastPickBanItem = pickBanSelections[pickBanSelections.length - 1];
+      if (lastPickBanItem.side === PickBanTeamSide.UNSELECTED) {
+        const isTeamOnePickingSide = this.isTeamOneTurn();
+        if (
+          (isTeamOnePickingSide && this.isCurrentPlayerTeamOne()) ||
+          (!isTeamOnePickingSide && this.isCurrentPlayerTeamTwo())
+        ) {
+          this.pickTeamSide(isTeamOnePickingSide);
+        }
+      }
+
+      // Check for Completion
+      if (pickBanSelections.length >= 7) {
+        // If last item is still being selected, it is not completed just yet.
+        const lastPickBanItem = pickBanSelections[pickBanSelections.length - 1];
+        if (lastPickBanItem.side !== PickBanTeamSide.UNSELECTED) {
+          this.isComplete = true;
+        }
+      }
     },
   },
   mounted() {

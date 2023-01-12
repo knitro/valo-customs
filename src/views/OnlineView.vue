@@ -155,7 +155,6 @@ export default Vue.extend({
       if (this.joinCodeValid && this.teamName.length <= 20) {
         requestJoinSeries(this.joinCode, this.teamName).then(
           async (isRequestSuccess: boolean) => {
-            console.log("passed" + isRequestSuccess);
             if (isRequestSuccess) {
               this.showJoinLoadingOverlay = true;
               const updater = (a: Series) => {
@@ -180,14 +179,12 @@ export default Vue.extend({
                     selfSeriesUser
                   )
                 ) {
-                  console.log("not contained");
                   this.showJoinLoadingOverlay = false;
                   this.isJoining = false;
                   unsubscribe();
                 }
               };
               const accessDenied = () => {
-                console.log("access denied");
                 this.showJoinLoadingOverlay = false;
                 this.isJoining = false;
               };

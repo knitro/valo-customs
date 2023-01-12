@@ -15,3 +15,14 @@ export async function doSignOut(): Promise<void> {
       return;
     });
 }
+
+/**
+ * Gets the Current Auth User's Email
+ * @returns the email address or null if the user is not logged in
+ */
+export function getUserEmail(): string | null {
+  if (auth.currentUser) {
+    return auth.currentUser.email;
+  }
+  return null;
+}

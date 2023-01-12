@@ -29,12 +29,12 @@ export default Vue.extend({
         {
           label: "Bind",
           image: require("@/assets/maps/bind.webp"),
-          active: true,
+          active: false,
         },
         {
           label: "Breeze",
           image: require("@/assets/maps/breeze.webp"),
-          active: true,
+          active: false,
         },
         {
           label: "Fracture",
@@ -52,6 +52,11 @@ export default Vue.extend({
           active: true,
         },
         {
+          label: "Lotus",
+          image: require("@/assets/maps/lotus.webp"),
+          active: true,
+        },
+        {
           label: "Pearl",
           image: require("@/assets/maps/pearl.webp"),
           active: true,
@@ -59,7 +64,7 @@ export default Vue.extend({
         {
           label: "Split",
           image: require("@/assets/maps/split.webp"),
-          active: false,
+          active: true,
         },
       ],
       background: require("@/assets/maps/range.webp"),
