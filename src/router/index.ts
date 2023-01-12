@@ -9,6 +9,9 @@ import OnlineFailView from "@/views/OnlineFailView.vue";
 import OnlinePickBanView from "@/views/OnlinePickBanView.vue";
 import LoginView from "@/views/LoginView.vue";
 import { auth } from "@/firebase/firebase";
+import ProfileView from "@/views/ProfileView.vue";
+import LogoutView from "@/views/LogoutView.vue";
+import FeedbackView from "@/views/FeedbackView.vue";
 
 Vue.use(VueRouter);
 
@@ -69,6 +72,30 @@ const routes: Array<RouteConfig> = [
       requiresAuth: true,
     },
     props: true,
+  },
+  {
+    path: "/profile",
+    name: "profile",
+    component: ProfileView,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: "/logout",
+    name: "logout",
+    component: LogoutView,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: "/feedback",
+    name: "feedback",
+    component: FeedbackView,
+    meta: {
+      requiresAuth: true,
+    },
   },
 ];
 
