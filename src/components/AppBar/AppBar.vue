@@ -53,6 +53,9 @@ export default Vue.extend({
     accountIcon: "mdi-login",
   }),
   methods: {
+    homeButtonPress() {
+      router.push("/home");
+    },
     sideBarButtonPress(link: string) {
       router.push(link);
     },
