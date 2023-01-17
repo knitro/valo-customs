@@ -2,7 +2,9 @@
   <div>
     <v-app-bar color="deep-purple" dark>
       <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
-      <v-toolbar-title>{{ title }}</v-toolbar-title>
+      <div id="home-button" @click="homeButtonPress">
+        <v-toolbar-title>{{ title }}</v-toolbar-title>
+      </div>
       <v-spacer></v-spacer>
       <v-btn icon @click="profileButtonPress">
         <v-icon large>mdi-account-circle</v-icon>
@@ -51,6 +53,9 @@ export default Vue.extend({
     accountIcon: "mdi-login",
   }),
   methods: {
+    homeButtonPress() {
+      router.push("/home");
+    },
     sideBarButtonPress(link: string) {
       router.push(link);
     },
@@ -78,5 +83,14 @@ export default Vue.extend({
 .app-bar-rhs-padding {
   // Padding is already added with the div addition for some reason
   padding-right: 0px; //8px;
+}
+
+#home-button {
+  padding: 15px;
+  padding-left: 20px;
+}
+
+#home-button:hover {
+  cursor: pointer;
 }
 </style>
