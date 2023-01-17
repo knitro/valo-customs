@@ -2,9 +2,9 @@
   <div>
     <v-app-bar color="deep-purple" dark>
       <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
-			<div id="home-button" @click="homeButtonPress">
-				<v-toolbar-title>{{ title }}</v-toolbar-title>
-			</div>
+      <div id="home-button" @click="homeButtonPress">
+        <v-toolbar-title>{{ title }}</v-toolbar-title>
+      </div>
       <v-spacer></v-spacer>
       <v-btn icon @click="profileButtonPress">
         <v-icon large>mdi-account-circle</v-icon>
@@ -86,11 +86,11 @@ export default Vue.extend({
 }
 
 #home-button {
-	padding: 15px;
-	padding-left: 20px;
+  padding: 15px;
+  padding-left: 20px;
 }
 
 #home-button:hover {
-	cursor: pointer;
+  cursor: pointer;
 }
 </style>
