@@ -9,7 +9,7 @@ import SpinnerValorant from "@/components/Spinner/SpinnerValorant.vue";
 import Vue from "vue";
 
 export default Vue.extend({
-  name: "RandomView",
+  name: "RandomMapView",
 
   components: { SpinnerValorant },
 });

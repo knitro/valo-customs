@@ -1,7 +1,7 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
 import HomeView from "../views/HomeView.vue";
-import RandomView from "@/views/RandomView.vue";
+import RandomMapView from "@/views/RandomMapView.vue";
 import BestOfOneView from "@/views/BestOfOneView.vue";
 import BestOfThreeView from "@/views/BestOfThreeView.vue";
 import OnlineView from "@/views/OnlineView.vue";
@@ -28,8 +28,9 @@ const routes: Array<RouteConfig> = [
   {
     path: "/random",
     name: "random",
-    component: RandomView,
+    component: RandomMapView,
   },
+
   {
     path: "/bestOfOne",
     name: "bestOfOne",
