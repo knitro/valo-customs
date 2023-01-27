@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import RandomMapView from "@/views/RandomMapView.vue";
+import TeamSelectView from "@/views/TeamSelectView.vue";
 import BestOfOneView from "@/views/BestOfOneView.vue";
 import BestOfThreeView from "@/views/BestOfThreeView.vue";
 import OnlineView from "@/views/OnlineView.vue";
@@ -30,7 +31,11 @@ const routes: Array<RouteConfig> = [
     name: "random",
     component: RandomMapView,
   },
-
+  {
+    path: "/teams",
+    name: "teams",
+    component: TeamSelectView,
+  },
   {
     path: "/bestOfOne",
     name: "bestOfOne",
