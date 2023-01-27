@@ -49,6 +49,12 @@ export default Vue.extend({
         subheader: "Use the Pick Ban System with people online",
         link: "/online",
       },
+      {
+        image: require("@/assets/images/icebox-breach.png"),
+        header: "Team Select",
+        subheader: "Create your teams using fully or semi-randomly",
+        link: "/teams",
+      },
     ];
     return {
       homeCardData: homeCardData,
