@@ -6,8 +6,8 @@
           class="pick-ban-selector-background"
           :src="backgroundImage"
           :key="backgroundImage"
-          :min-height="windowHeight - 64"
-          :max-height="windowHeight - 64"
+          :min-height="windowHeight"
+          :max-height="windowHeight"
         ></v-img>
       </Transition>
       <v-row>
@@ -504,7 +504,7 @@ export default Vue.extend({
 // Page Layout Styles
 ///////////////////////////////////////////////
 .body {
-  min-height: calc(100vh - 64px);
+  min-height: calc(100vh);
   display: flex;
   flex-direction: column;
 }

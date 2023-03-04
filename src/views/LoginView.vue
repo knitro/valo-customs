@@ -5,8 +5,8 @@
       class="login-view-background"
       :src="backgroundImage"
       :key="backgroundImage"
-      :min-height="windowHeight - 64"
-      :max-height="windowHeight - 64"
+      :min-height="windowHeight"
+      :max-height="windowHeight"
     >
       <div class="login-view-center">
         <v-card dark color="rgba(103, 58, 183, 0.95)" width="500">

@@ -5,8 +5,8 @@
       class="spinner-selector-background"
       :src="backgroundImage"
       :key="backgroundImage"
-      :min-height="windowHeight - 64"
-      :max-height="windowHeight - 64"
+      :min-height="windowHeight"
+      :max-height="windowHeight"
     >
       <v-row no-gutters>
         <v-col cols="6">
