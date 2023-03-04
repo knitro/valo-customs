@@ -89,7 +89,7 @@ export default Vue.extend({
     width: 16px;
     border-radius: 16px;
     transform-origin: 50% 50%;
-    transition: transform 0.25s ease-out;
+    transition: transform 0.5s ease-out;
   }
 }
 
@@ -104,7 +104,7 @@ export default Vue.extend({
 
   .fill-on-hover {
     z-index: -10;
-    transform: scale(50);
+    transform: scale(100);
   }
 }
 
