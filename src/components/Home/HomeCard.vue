@@ -15,6 +15,7 @@
       <div class="corner-bottom-right">
         <v-icon class="continue-arrow-icon">mdi-arrow-right-thin</v-icon>
       </div>
+      <div class="fill-on-hover"></div>
     </div>
   </v-card>
 </template>
@@ -73,22 +74,7 @@ export default Vue.extend({
     color: #9c27b0;
   }
   overflow: hidden;
-}
-
-.home-card:hover {
-  // background-color: rgba(242, 97, 87, 1);
-  transform-origin: 50% 50%;
-  transform: scale(1.05);
-
-  .card-text {
-    transition: all 0.3s ease-out;
-    color: rgba(255, 255, 255, 0.8);
-  }
-}
-
-.home-card-bottom {
-  &:before {
-    content: "";
+  .fill-on-hover {
     position: absolute;
     z-index: -10;
     bottom: 0px;
@@ -100,7 +86,18 @@ export default Vue.extend({
     transform-origin: 50% 50%;
     transition: transform 0.25s ease-out;
   }
-  &:hover:before {
+}
+
+.home-card:hover {
+  transform-origin: 50% 50%;
+  transform: scale(1.05);
+
+  .card-text {
+    transition: all 0.3s ease-out;
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .fill-on-hover {
     z-index: -10;
     transform: scale(50);
   }
