@@ -1,5 +1,6 @@
 <template>
   <div>
+    <app-bar-valo-custom title="Home"></app-bar-valo-custom>
     <v-img
       class="spinner-selector-background"
       :src="backgroundImage"
@@ -28,10 +29,11 @@
 
 <script lang="ts">
 import Vue from "vue";
+import AppBarValoCustom from "@/components/AppBar/AppBarValoCustom.vue";
 
 export default Vue.extend({
   name: "FeedbackView",
-  components: {},
+  components: { AppBarValoCustom },
   data() {
     return {
       backgroundImage: require("@/assets/backgrounds/range-outside.png"),

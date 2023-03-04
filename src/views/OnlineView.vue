@@ -1,5 +1,6 @@
 <template>
   <div>
+    <app-bar-valo-custom title="Home"></app-bar-valo-custom>
     <v-img
       class="login-view-background"
       :src="backgroundImage"
@@ -106,11 +107,12 @@ import {
 import { Series, SeriesUser } from "@/firebase/database/database-interfaces";
 import { auth } from "@/firebase/firebase";
 import Vue from "vue";
+import AppBarValoCustom from "@/components/AppBar/AppBarValoCustom.vue";
 
 export default Vue.extend({
   name: "OnlineView",
 
-  components: {},
+  components: { AppBarValoCustom },
   data() {
     return {
       teamName: "",

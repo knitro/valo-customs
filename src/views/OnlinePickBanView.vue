@@ -1,5 +1,6 @@
 <template>
   <div>
+    <app-bar-valo-custom title="Home"></app-bar-valo-custom>
     <v-img
       class="login-view-background"
       :src="backgroundImage"
@@ -83,6 +84,7 @@ import {
   VCardText,
 } from "vuetify/lib";
 import PickBanSelectorOnline from "@/components/PickBan/PickBanSelectorOnline.vue";
+import AppBarValoCustom from "@/components/AppBar/AppBarValoCustom.vue";
 
 export default Vue.extend({
   name: "OnlinePickBanView",
@@ -96,6 +98,7 @@ export default Vue.extend({
     VDivider,
     VCardText,
     PickBanSelectorOnline,
+    AppBarValoCustom,
   },
   props: {
     id: String,

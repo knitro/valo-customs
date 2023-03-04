@@ -1,10 +1,25 @@
 <template>
   <div>
-    <v-app-bar color="deep-purple" dark>
+    <v-app-bar
+      color="#F26157"
+      dark
+      fixed
+      :shrink-on-scroll="isProminent"
+      :prominent="isProminent"
+    >
+      <template v-slot:img="{ props }">
+        <v-img
+          v-bind="props"
+          :src="background"
+          gradient="to top right, rgba(242,97,87,.5), rgba(242,97,87,.9)"
+          position="0% 35%"
+        >
+        </v-img>
+      </template>
       <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
-      <div id="home-button" @click="homeButtonPress">
-        <v-toolbar-title>{{ title }}</v-toolbar-title>
-      </div>
+      <v-app-bar-title>
+        <div id="title-text" @click="homeButtonPress">{{ title }}</div>
+      </v-app-bar-title>
       <v-spacer></v-spacer>
       <v-btn icon @click="profileButtonPress">
         <v-icon large>mdi-account-circle</v-icon>
@@ -46,11 +61,18 @@ export default Vue.extend({
   props: {
     title: String,
     items: Array as PropType<AppBarItem[]>,
+    isProminent: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
   },
   data: () => ({
     drawer: false,
     group: null,
     accountIcon: "mdi-login",
+    background:
+      "https://cdnportal.mobalytics.gg/production/2021/10/49cd9c4b-dos-and-donts-of-valorant.jpg",
   }),
   methods: {
     homeButtonPress() {
@@ -85,12 +107,12 @@ export default Vue.extend({
   padding-right: 0px; //8px;
 }
 
-#home-button {
-  padding: 15px;
-  padding-left: 20px;
+#title-text:hover {
+  cursor: pointer;
 }
 
-#home-button:hover {
-  cursor: pointer;
+.v-toolbar.v-toolbar--absolute {
+  width: auto !important;
+  // position: fixed;
 }
 </style>

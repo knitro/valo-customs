@@ -1,5 +1,6 @@
 <template>
   <div>
+    <app-bar-valo-custom title="Home"></app-bar-valo-custom>
     <v-img
       class="spinner-selector-background"
       :src="backgroundImage"
@@ -52,10 +53,11 @@
 import { getUserEmail } from "@/firebase/auth/auth";
 import Vue from "vue";
 import router from "@/router";
+import AppBarValoCustom from "@/components/AppBar/AppBarValoCustom.vue";
 
 export default Vue.extend({
   name: "ProfileView",
-  components: {},
+  components: { AppBarValoCustom },
   setup() {
     return {
       optionsButtons: [

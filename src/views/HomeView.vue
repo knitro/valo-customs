@@ -1,6 +1,7 @@
 <template>
   <div>
-    <v-container>
+    <app-bar-valo-custom title="Home" isProminent></app-bar-valo-custom>
+    <v-container id="home-page">
       <v-row>
         <v-col
           v-for="(cardData, index) in homeCardData"
@@ -23,11 +24,13 @@
 import Vue from "vue";
 import HomeCard from "@/components/Home/HomeCard.vue";
 import { HomeCardItem } from "@/components/Home/HomeCardInterfaces";
+import AppBarValoCustom from "@/components/AppBar/AppBarValoCustom.vue";
 
 export default Vue.extend({
   name: "HomeView",
   components: {
     HomeCard,
+    AppBarValoCustom,
   },
   data() {
     const homeCardData: HomeCardItem[] = [
