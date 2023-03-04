@@ -37,33 +37,32 @@ export default Vue.extend({
       {
         image: require("@/assets/images/bottom-stairs.png"),
         header: "Random Map",
-        subheader: "Quickly pick a random map",
+        subheader: "Quickly pick a random map.",
         link: "/random",
       },
       {
         image: require("@/assets/images/top-office.png"),
         header: "BO1 PickBan",
-        subheader:
-          "Pick your map for your customs like the pros! (Best out of 1)",
+        subheader: "Can't agree on a map? Use a Pick Ban!",
         link: "/bestOfOne",
       },
       {
         image: require("@/assets/images/under-office.png"),
         header: "BO3 PickBan",
         subheader:
-          "Show off which 5 stack is better in an up to a 3 match series",
+          "Show off which 5 stack is better in an up to a 3 match series.",
         link: "/bestOfThree",
       },
       {
         image: require("@/assets/images/distance-land.png"),
         header: "Online",
-        subheader: "Use the Pick Ban System with people online",
+        subheader: "Use the Pick Ban System against people online!",
         link: "/online",
       },
       {
         image: require("@/assets/images/icebox-breach.png"),
         header: "Team Select",
-        subheader: "Create your teams using fully or semi-randomly",
+        subheader: "Create your teams using fully or semi-randomly.",
         link: "/teams",
       },
     ];
