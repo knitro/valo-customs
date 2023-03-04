@@ -1,5 +1,10 @@
 <template>
-  <v-card class="mx-auto home-card" max-width="600" @click="linkToPage(link)">
+  <v-card
+    class="mx-auto home-card"
+    max-width="600"
+    height="100%"
+    @click="linkToPage(link)"
+  >
     <v-img class="card-image" :aspect-ratio="16 / 14" :src="image"></v-img>
     <div class="home-card-bottom">
       <v-card-text class="pt-6" style="position: relative">
