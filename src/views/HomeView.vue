@@ -42,9 +42,17 @@ export default Vue.extend({
       },
       {
         image: require("@/assets/images/top-office.png"),
-        header: "Local PickBan",
-        subheader: "Find the perfect map for your customs",
+        header: "BO1 PickBan",
+        subheader:
+          "Pick your map for your customs like the pros! (Best out of 1)",
         link: "/bestOfOne",
+      },
+      {
+        image: require("@/assets/images/under-office.png"),
+        header: "BO3 PickBan",
+        subheader:
+          "Show off which 5 stack is better in an up to a 3 match series",
+        link: "/bestOfThree",
       },
       {
         image: require("@/assets/images/distance-land.png"),
