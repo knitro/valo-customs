@@ -282,7 +282,7 @@ export default Vue.extend({
 
 #spinner-selector-filters {
   position: absolute;
-  top: 80px;
+  top: 160px;
   right: 10px;
 }
 
