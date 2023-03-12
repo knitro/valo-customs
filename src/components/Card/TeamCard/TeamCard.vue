@@ -1,25 +1,18 @@
 <template>
   <v-card>
-    <v-app-bar
-      :color="color"
-      dark
-      prominent
-      short
+    <v-img
       src="https://picsum.photos/1920/1080?random"
+      :gradient="'to top right, ' + color + ', rgba(25,32,72,.7)'"
+      height="112"
+      class="bottom-border-radius"
     >
-      <template v-slot:img="{ props }">
-        <v-img
-          v-bind="props"
-          :gradient="'to top right, ' + color + ', rgba(25,32,72,.7)'"
-        ></v-img>
-      </template>
       <v-card-text>
         <div>{{ subtitle }}</div>
         <div class="text-h4 text--primary">
           {{ title }}
         </div>
       </v-card-text>
-    </v-app-bar>
+    </v-img>
 
     <v-list>
       <v-list-item v-show="players.length === 0">
@@ -65,7 +58,7 @@ export default Vue.extend({
 </script>
 
 <style scoped lang="scss">
-.team-card-bar {
+.bottom-border-radius {
   border-radius: 10px;
 }
 </style>
