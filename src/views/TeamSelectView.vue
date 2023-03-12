@@ -60,8 +60,8 @@
       <v-col cols="4">
         <team-card
           title="Team 1"
-          subtitle="Attackers"
-          color="red"
+          subtitle="Attacker Side"
+          color="#EF5351"
           :players="teamOne"
           class="grid-margin"
         ></team-card>
@@ -69,8 +69,8 @@
       <v-col cols="4">
         <team-card
           title="Team 2"
-          subtitle="Defenders"
-          color="blue"
+          subtitle="Defender Side"
+          color="#16E5B4"
           :players="teamTwo"
           class="grid-margin"
         ></team-card>
@@ -78,7 +78,7 @@
       <v-col cols="4">
         <team-card
           title="Spectators"
-          subtitle=""
+          subtitle="Observers"
           color="grey"
           :players="spectators"
           class="grid-margin"
@@ -86,13 +86,19 @@
         <v-row>
           <v-col class="grid-margin">
             <v-btn x-large block @click="createTeams" color="warning">
-              <v-icon left dark> mdi-trash-can-outline </v-icon>
+              <v-icon left dark> mdi-redo </v-icon>
               Recreate Teams
             </v-btn>
           </v-col>
           <v-col class="grid-margin">
-            <v-btn x-large block @click="addPlayersView" color="warning">
-              <v-icon left dark> mdi-trash-can-outline </v-icon>
+            <v-btn
+              x-large
+              block
+              @click="addPlayersView"
+              color="deep-purple"
+              dark
+            >
+              <v-icon left dark> mdi-arrow-left </v-icon>
               Change Player List
             </v-btn>
           </v-col>

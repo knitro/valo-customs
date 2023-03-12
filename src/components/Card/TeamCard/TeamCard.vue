@@ -1,15 +1,34 @@
 <template>
   <v-card>
-    <v-card-text>
-      <div>{{ subtitle }}</div>
-      <p class="text-h4 text--primary">
-        {{ title }}
-      </p>
-    </v-card-text>
+    <v-app-bar
+      :color="color"
+      dark
+      prominent
+      short
+      src="https://picsum.photos/1920/1080?random"
+    >
+      <template v-slot:img="{ props }">
+        <v-img
+          v-bind="props"
+          :gradient="'to top right, ' + color + ', rgba(25,32,72,.7)'"
+        ></v-img>
+      </template>
+      <v-card-text>
+        <div>{{ subtitle }}</div>
+        <div class="text-h4 text--primary">
+          {{ title }}
+        </div>
+      </v-card-text>
+    </v-app-bar>
+
     <v-list>
+      <v-list-item v-show="players.length === 0">
+        <i>No players</i>
+      </v-list-item>
+
       <v-list-item v-for="(item, index) in players" :key="index">
-        <v-list-item-avatar>
-          <v-icon class="lighten-1" :class="color">mdi-account</v-icon>
+        <v-list-item-avatar :color="color">
+          <v-icon class="lighten-1">mdi-account</v-icon>
         </v-list-item-avatar>
         <v-list-item-content>
           <v-list-item-title>{{ item }}</v-list-item-title>
@@ -45,4 +64,8 @@ export default Vue.extend({
 });
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.team-card-bar {
+  border-radius: 10px;
+}
+</style>
