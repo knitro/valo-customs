@@ -35,7 +35,7 @@ export default Vue.extend({
   data: () => ({
     items: [
       { label: "Home", icon: "mdi-home", link: "/home" },
-      { label: "Random", icon: "mdi-dice-6", link: "/random" },
+      { label: "Random Map", icon: "mdi-dice-6", link: "/random" },
       {
         label: "Pick/Ban: Best of 1 ",
         icon: "mdi-trophy-award",
@@ -47,6 +47,7 @@ export default Vue.extend({
         link: "/bestOfThree",
       },
       { label: "Online", icon: "mdi-web", link: "/online" },
+      { label: "Random Teams", icon: "mdi-account-switch", link: "/teams" },
     ] as AppBarItem[],
   }),
 });

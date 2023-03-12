@@ -1,6 +1,6 @@
 <template>
   <div>
-    <app-bar-valo-custom title="Home"></app-bar-valo-custom>
+    <app-bar-valo-custom title="My Profile"></app-bar-valo-custom>
     <v-img
       class="spinner-selector-background"
       :src="backgroundImage"
