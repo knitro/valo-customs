@@ -11,6 +11,12 @@
             <b>{{ playerNames.length }}</b>
           </v-card-subtitle>
           <v-list>
+            <v-list-item v-show="playerNames.length === 0">
+              <i>
+                No players added yet! To add a player, enter a player name in
+                the text field on the right.
+              </i>
+            </v-list-item>
             <v-list-item v-for="(item, index) in playerNames" :key="index">
               <v-list-item-avatar>
                 <v-icon class="purple lighten-1" dark>mdi-account</v-icon>
