@@ -6,6 +6,10 @@
       <v-col>
         <v-card class="grid-margin">
           <v-card-title>Player List</v-card-title>
+          <v-card-subtitle>
+            Player Count:
+            <b>{{ playerNames.length }}</b>
+          </v-card-subtitle>
           <v-list>
             <v-list-item v-for="(item, index) in playerNames" :key="index">
               <v-list-item-avatar>
