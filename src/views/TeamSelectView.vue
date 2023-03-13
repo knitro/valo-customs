@@ -2,7 +2,7 @@
   <div>
     <app-bar-valo-custom title="Team Select"></app-bar-valo-custom>
 
-    <v-row v-show="state === 0">
+    <v-row v-show="state === 0" no-gutters>
       <v-col>
         <v-card class="grid-margin">
           <v-card-title>Player List</v-card-title>
@@ -56,7 +56,7 @@
       </v-col>
     </v-row>
 
-    <v-row v-show="state === 1">
+    <v-row v-show="state === 1" no-gutters>
       <v-col cols="4">
         <team-card
           title="Team 1"
