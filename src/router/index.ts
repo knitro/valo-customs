@@ -80,14 +80,6 @@ const routes: Array<RouteConfig> = [
     props: true,
   },
   {
-    path: "/teams",
-    name: "teams",
-    component: TeamSelectView,
-    meta: {
-      requiresAuth: true,
-    },
-  },
-  {
     path: "/profile",
     name: "profile",
     component: ProfileView,
