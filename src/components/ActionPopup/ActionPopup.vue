@@ -13,9 +13,11 @@
               v-for="option in options"
               :key="option.label"
               variant="text"
-              color="deep-purple-accent-4"
+              :color="option.color"
               @click="option.clickFunction"
+              :dark="option.dark"
             >
+              <v-icon left> {{ option.icon }} </v-icon>
               {{ option.label }}
             </v-btn>
           </v-card-actions>

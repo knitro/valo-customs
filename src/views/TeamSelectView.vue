@@ -273,10 +273,16 @@ export default Vue.extend({
           this.playerNames = [];
           this.showRemovePlayersPopup = false;
         },
+        icon: "mdi-trash-can-outline",
+        color: "red",
+        dark: true,
       },
       {
         label: "Cancel",
         clickFunction: () => (this.showRemovePlayersPopup = false),
+        icon: "mdi-undo-variant",
+        color: "",
+        dark: false,
       },
     ] as ActionPopupOptions[];
   },
