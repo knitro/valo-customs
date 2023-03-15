@@ -23,7 +23,7 @@
                 :src="playerListImage"
                 :gradient="'to top right, rgba(116, 0, 184, 0.8), rgba(25,32,72,.7)'"
                 height="112"
-                class="card-curved"
+                class="card-header-curved"
               >
                 <v-card-text>
                   <div class="text-h4 title-text">Player List</div>
@@ -308,9 +308,15 @@ export default Vue.extend({
 .grid-margin {
   margin: 10px;
 }
+.card-header-curved {
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
 .card-curved {
   border-radius: 12px;
 }
+
 .background-color-white-transparent {
   background-color: rgba(255, 255, 255, 0.5);
 }

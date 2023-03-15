@@ -5,7 +5,7 @@
         :src="headerImage"
         :gradient="'to top right, ' + color + ', rgba(25,32,72,.7)'"
         height="112"
-        class="card-curved"
+        class="card-header-curved"
       >
         <v-card-text>
           <div class="subtitle-text">
@@ -83,10 +83,14 @@ export default Vue.extend({
 </script>
 
 <style scoped lang="scss">
+.card-header-curved {
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
 .card-curved {
   border-radius: 12px;
 }
-
 .background-color-white-transparent {
   background-color: rgba(255, 255, 255, 0.5);
 }
