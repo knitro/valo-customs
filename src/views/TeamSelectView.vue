@@ -262,6 +262,9 @@ export default Vue.extend({
       this.spectators = [];
     },
     pressClearPlayerList(): void {
+      if (this.playerNames.length <= 0) {
+        return;
+      }
       this.showRemovePlayersPopup = true;
     },
   },
