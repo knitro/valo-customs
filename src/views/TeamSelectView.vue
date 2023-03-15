@@ -7,6 +7,14 @@
     >
       <app-bar-valo-custom title="Team Select"></app-bar-valo-custom>
 
+      <action-popup
+        title="Remove all Players"
+        subtitle="Are you sure you want to remove all the players in the players list?"
+        :image="removeAllPlayersImage"
+        :options="removeAllPlayersOption"
+        :show="showRemovePlayersPopup"
+      ></action-popup>
+
       <v-row v-show="state === 0" no-gutters>
         <v-col cols="6">
           <v-card class="grid-margin card-curved" :color="cardBackgroundColour">
@@ -77,7 +85,7 @@
               <v-btn
                 x-large
                 block
-                @click="clearPlayerList"
+                @click="pressClearPlayerList"
                 color="warning"
                 rounded
               >
@@ -174,6 +182,8 @@
 import Vue from "vue";
 import AppBarValoCustom from "@/components/AppBar/AppBarValoCustom.vue";
 import TeamCard from "@/components/Card/TeamCard/TeamCard.vue";
+import { ActionPopupOptions } from "@/components/ActionPopup/ActionPopupInterfaces";
+import ActionPopup from "@/components/ActionPopup/ActionPopup.vue";
 
 enum TeamSelectMode {
   PLAYER_ADD = 0,
@@ -182,7 +192,7 @@ enum TeamSelectMode {
 
 export default Vue.extend({
   name: "TeamSelectView",
-  components: { AppBarValoCustom, TeamCard },
+  components: { AppBarValoCustom, TeamCard, ActionPopup },
   data() {
     return {
       inputValue: "",
@@ -201,11 +211,18 @@ export default Vue.extend({
 
       windowHeight: window.innerHeight,
       cardBackgroundColour: "rgba(255, 255, 255, 0.5)",
+
+      showRemovePlayersPopup: false,
+      removeAllPlayersImage: require("@/assets/images/outside.png"),
+      removeAllPlayersOption: [] as ActionPopupOptions[],
     };
   },
   methods: {
     addNewPlayer(): void {
       const player = this.inputValue;
+      if (player === "") {
+        return;
+      }
       this.playerNames.push(player);
       this.inputValue = "";
     },
@@ -244,9 +261,24 @@ export default Vue.extend({
       this.teamTwo = [];
       this.spectators = [];
     },
-    clearPlayerList(): void {
-      this.playerNames = [];
+    pressClearPlayerList(): void {
+      this.showRemovePlayersPopup = true;
     },
+  },
+  mounted() {
+    this.removeAllPlayersOption = [
+      {
+        label: "Clear Players",
+        clickFunction: () => {
+          this.playerNames = [];
+          this.showRemovePlayersPopup = false;
+        },
+      },
+      {
+        label: "Cancel",
+        clickFunction: () => (this.showRemovePlayersPopup = false),
+      },
+    ] as ActionPopupOptions[];
   },
 });
 </script>
