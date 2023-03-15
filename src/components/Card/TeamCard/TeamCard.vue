@@ -22,7 +22,11 @@
         </v-card-text>
       </v-img>
     </div>
-    <v-list :color="backgroundColour">
+    <v-list
+      :color="backgroundColour"
+      :class="overflowCheck ? 'overflow-y-auto' : ''"
+      :max-height="overflowCheck ? '500' : ''"
+    >
       <v-list-item v-show="players.length === 0">
         <i>No players</i>
       </v-list-item>
@@ -63,6 +67,10 @@ export default Vue.extend({
     },
     headerImage: {
       type: String,
+      required: true,
+    },
+    overflowCheck: {
+      type: Boolean,
       required: true,
     },
   },

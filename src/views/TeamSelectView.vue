@@ -26,7 +26,11 @@
                 </v-card-text>
               </v-img>
             </div>
-            <v-list :color="cardBackgroundColour">
+            <v-list
+              :color="cardBackgroundColour"
+              class="overflow-y-auto"
+              max-height="600"
+            >
               <v-list-item v-show="playerNames.length === 0">
                 <i>
                   No players added yet! To add a player, enter a player name in
@@ -107,6 +111,7 @@
             :players="teamOne"
             class="grid-margin"
             :headerImage="backgroundTeamOne"
+            :overflowCheck="false"
           ></team-card>
         </v-col>
         <v-col cols="4">
@@ -117,6 +122,7 @@
             :players="teamTwo"
             class="grid-margin"
             :headerImage="backgroundTeamTwo"
+            :overflowCheck="false"
           ></team-card>
         </v-col>
         <v-col cols="4">
@@ -127,6 +133,7 @@
             :players="spectators"
             class="grid-margin"
             :headerImage="backgroundSpectator"
+            :overflowCheck="true"
           ></team-card>
 
           <v-row no-gutters>
