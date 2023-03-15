@@ -9,19 +9,21 @@
 
       <v-row v-show="state === 0" no-gutters>
         <v-col cols="6">
-          <v-card class="grid-margin" :color="cardBackgroundColour">
+          <v-card class="grid-margin card-curved" :color="cardBackgroundColour">
             <div class="background-color-white-transparent">
               <v-img
-                src="https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg"
-                :gradient="'to top right, rgba(103,58,183,1), rgba(25,32,72,.7)'"
+                :src="playerListImage"
+                :gradient="'to top right, rgba(116, 0, 184, 0.8), rgba(25,32,72,.7)'"
                 height="112"
-                class="bottom-border-radius"
+                class="card-curved"
               >
-                <v-card-title>Player List</v-card-title>
-                <v-card-subtitle>
-                  Player Count:
-                  <b>{{ playerNames.length }}</b>
-                </v-card-subtitle>
+                <v-card-text>
+                  <div class="text-h4 title-text">Player List</div>
+                  <div class="subtitle-text">
+                    Player Count:
+                    <b>{{ playerNames.length }}</b>
+                  </div>
+                </v-card-text>
               </v-img>
             </div>
             <v-list :color="cardBackgroundColour">
@@ -49,23 +51,32 @@
         </v-col>
 
         <v-col cols="6">
-          <v-text-field
-            append-outer-icon="mdi-send"
-            v-model="inputValue"
-            outlined
-            height="50"
-            class="team-select-text-input grid-margin"
-            label="Player Name"
-            color="purple"
-            @keydown.enter="addNewPlayer"
-            @click:append-outer="addNewPlayer"
-            clear-icon="mdi-close-circle"
-            clearable
-          >
-          </v-text-field>
+          <v-card class="grid-margin card-curved" :color="cardBackgroundColour">
+            <v-text-field
+              append-outer-icon="mdi-send"
+              v-model="inputValue"
+              height="60"
+              class="team-select-text-input"
+              label="Player Name"
+              color="purple"
+              @keydown.enter="addNewPlayer"
+              @click:append-outer="addNewPlayer"
+              clear-icon="mdi-close-circle"
+              clearable
+              filled
+              hide-details="auto"
+            >
+            </v-text-field>
+          </v-card>
           <v-row class="grid-margin">
             <v-col>
-              <v-btn x-large block @click="clearPlayerList" color="warning">
+              <v-btn
+                x-large
+                block
+                @click="clearPlayerList"
+                color="warning"
+                rounded
+              >
                 <v-icon left dark> mdi-trash-can-outline </v-icon>
                 Clear Player List
               </v-btn>
@@ -77,6 +88,7 @@
                 @click="createTeams"
                 color="deep-purple"
                 dark
+                rounded
               >
                 <v-icon left dark> mdi-account-group </v-icon>
                 Create Teams
@@ -116,20 +128,28 @@
             class="grid-margin"
             :headerImage="backgroundSpectator"
           ></team-card>
-          <v-row>
-            <v-col class="grid-margin">
-              <v-btn x-large block @click="createTeams" color="warning">
+
+          <v-row no-gutters>
+            <v-col>
+              <v-btn
+                x-large
+                @click="createTeams"
+                color="warning"
+                rounded
+                class="grid-margin"
+              >
                 <v-icon left dark> mdi-redo </v-icon>
                 Recreate Teams
               </v-btn>
             </v-col>
-            <v-col class="grid-margin">
+            <v-col>
               <v-btn
                 x-large
-                block
                 @click="addPlayersView"
                 color="deep-purple"
                 dark
+                rounded
+                class="grid-margin"
               >
                 <v-icon left dark> mdi-arrow-left </v-icon>
                 Change Player List
@@ -166,6 +186,7 @@ export default Vue.extend({
       teamTwo: [] as string[],
       spectators: [] as string[],
 
+      playerListImage: require("@/assets/images/target-practice.png"),
       backgroundTeamOne: require("@/assets/images/range-attack.png"),
       backgroundTeamTwo: require("@/assets/images/range-defense.png"),
       backgroundSpectator: require("@/assets/images/outside.png"),
@@ -232,23 +253,25 @@ export default Vue.extend({
   transform: translate(-50%, -50%);
   width: 1000px;
 }
-
 .team-select-text-input {
-  font-size: 14px;
+  font-size: 24px;
+  padding-right: 8px;
 }
-
 .grid-margin {
   margin: 10px;
 }
-
-.bottom-border-radius {
-  border-top-left-radius: 4px;
-  border-top-right-radius: 4px;
-  border-end-start-radius: 12px;
-  border-end-end-radius: 12px;
+.card-curved {
+  border-radius: 12px;
 }
-
 .background-color-white-transparent {
   background-color: rgba(255, 255, 255, 0.5);
+}
+.title-text {
+  // color: rgba(114, 72, 188, 1);
+  color: rgba(255, 255, 255, 1);
+}
+.subtitle-text {
+  color: rgba(255, 255, 255, 1);
+  // color: rgba(180, 180, 180, 0.9);
 }
 </style>

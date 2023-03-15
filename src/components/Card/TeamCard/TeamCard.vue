@@ -1,17 +1,24 @@
 <template>
-  <v-card :color="backgroundColour">
+  <v-card class="card-curved" :color="backgroundColour">
     <div class="background-color-white-transparent">
       <v-img
         :src="headerImage"
         :gradient="'to top right, ' + color + ', rgba(25,32,72,.7)'"
         height="112"
-        class="bottom-border-radius"
+        class="card-curved"
       >
         <v-card-text>
-          <div>{{ subtitle }}</div>
-          <div class="text-h4 text--primary">
+          <div class="subtitle-text">
+            {{ subtitle }}
+          </div>
+          <div class="text-h4 title-text">
             {{ title }}
           </div>
+
+          <!-- <div>{{ subtitle }}</div>
+          <div class="text-h4 text--primary">
+            {{ title }}
+          </div> -->
         </v-card-text>
       </v-img>
     </div>
@@ -68,14 +75,19 @@ export default Vue.extend({
 </script>
 
 <style scoped lang="scss">
-.bottom-border-radius {
-  border-top-left-radius: 4px;
-  border-top-right-radius: 4px;
-  border-end-start-radius: 12px;
-  border-end-end-radius: 12px;
+.card-curved {
+  border-radius: 12px;
 }
 
 .background-color-white-transparent {
   background-color: rgba(255, 255, 255, 0.5);
+}
+
+.subtitle-text {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.title-text {
+  color: rgba(15, 15, 15, 0.9);
 }
 </style>
