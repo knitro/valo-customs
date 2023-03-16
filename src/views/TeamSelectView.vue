@@ -11,8 +11,16 @@
         title="Remove all Players"
         subtitle="Are you sure you want to remove all the players in the players list?"
         :image="removeAllPlayersImage"
-        :options="removeAllPlayersOption"
+        :options="removeAllPlayersOptions"
         :show="showRemovePlayersPopup"
+      ></action-popup>
+
+      <action-popup
+        title="Choose a Map"
+        subtitle="Pick a random map or do a pick/ban system!"
+        :image="chooseMapImage"
+        :options="chooseMapOptions"
+        :show="showChooseMapPopup"
       ></action-popup>
 
       <v-row v-show="state === 0" no-gutters>
@@ -106,7 +114,7 @@
               <v-btn
                 x-large
                 block
-                @click="createTeams"
+                @click="pressCreateTeams"
                 color="deep-purple"
                 dark
                 rounded
@@ -152,28 +160,44 @@
             :headerImage="backgroundSpectator"
             :overflowCheck="true"
           ></team-card>
-
-          <v-row no-gutters>
-            <v-col>
+          <v-row align="center" justify="center" class="padding-top">
+            <v-col cols="11" align="center" justify="center">
               <v-btn
                 x-large
-                @click="createTeams"
+                @click="pressChooseMap"
+                color="rgba(242, 97, 87, 1)"
+                rounded
+                dark
+                block
+              >
+                <v-icon left dark> mdi-map </v-icon>
+                Choose a Map
+              </v-btn>
+            </v-col>
+          </v-row>
+          <v-row align="center" justify="center">
+            <v-col cols="11" align="center" justify="center">
+              <v-btn
+                x-large
+                @click="pressRecreateTeams"
                 color="warning"
                 rounded
-                class="grid-margin"
+                block
               >
                 <v-icon left dark> mdi-redo </v-icon>
                 Recreate Teams
               </v-btn>
             </v-col>
-            <v-col>
+          </v-row>
+          <v-row align="center" justify="center">
+            <v-col cols="11" align="center" justify="center">
               <v-btn
                 x-large
-                @click="addPlayersView"
+                @click="pressChangePlayerList"
                 color="deep-purple"
                 dark
                 rounded
-                class="grid-margin"
+                block
               >
                 <v-icon left dark> mdi-arrow-left </v-icon>
                 Change Player List
@@ -193,6 +217,7 @@ import AppBarValoCustom from "@/components/AppBar/AppBarValoCustom.vue";
 import TeamCard from "@/components/Card/TeamCard/TeamCard.vue";
 import { ActionPopupOptions } from "@/components/ActionPopup/ActionPopupInterfaces";
 import ActionPopup from "@/components/ActionPopup/ActionPopup.vue";
+import router from "@/router";
 
 enum TeamSelectMode {
   PLAYER_ADD = 0,
@@ -219,11 +244,15 @@ export default Vue.extend({
       backgroundImage: require("@/assets/backgrounds/range-bots.png"),
 
       windowHeight: window.innerHeight,
-      cardBackgroundColour: "rgba(255, 255, 255, 0.8",
+      cardBackgroundColour: "rgba(255, 255, 255, 0.75)",
 
       showRemovePlayersPopup: false,
       removeAllPlayersImage: require("@/assets/images/outside.png"),
-      removeAllPlayersOption: [] as ActionPopupOptions[],
+      removeAllPlayersOptions: [] as ActionPopupOptions[],
+
+      showChooseMapPopup: false,
+      chooseMapImage: require("@/assets/images/distance-land.png"),
+      chooseMapOptions: [] as ActionPopupOptions[],
     };
   },
   methods: {
@@ -258,12 +287,6 @@ export default Vue.extend({
         this.teamTwo = shuffledArray.slice(5, 10);
         this.spectators = shuffledArray.slice(10);
       }
-
-      this.state = TeamSelectMode.TEAM_VIEW;
-    },
-    addPlayersView(): void {
-      this.state = TeamSelectMode.PLAYER_ADD;
-      this.resetArrays();
     },
     resetArrays(): void {
       this.teamOne = [];
@@ -276,9 +299,23 @@ export default Vue.extend({
       }
       this.showRemovePlayersPopup = true;
     },
+    pressCreateTeams(): void {
+      this.createTeams();
+      this.state = TeamSelectMode.TEAM_VIEW;
+    },
+    pressRecreateTeams(): void {
+      this.createTeams();
+    },
+    pressChooseMap(): void {
+      this.showChooseMapPopup = true;
+    },
+    pressChangePlayerList(): void {
+      this.state = TeamSelectMode.PLAYER_ADD;
+      this.resetArrays();
+    },
   },
   mounted() {
-    this.removeAllPlayersOption = [
+    this.removeAllPlayersOptions = [
       {
         label: "Clear Players",
         clickFunction: () => {
@@ -297,19 +334,61 @@ export default Vue.extend({
         dark: false,
       },
     ] as ActionPopupOptions[];
+
+    this.chooseMapOptions = [
+      {
+        label: "Random Map",
+        clickFunction: () => {
+          this.showChooseMapPopup = false;
+          router.push("/random");
+        },
+        icon: "mdi-dice-6",
+        color: "red",
+        dark: true,
+      },
+      {
+        label: "Pick Ban Bo1",
+        clickFunction: () => {
+          this.showChooseMapPopup = false;
+          router.push("/bestOfOne");
+        },
+        icon: "mdi-trophy-award",
+        color: "red",
+        dark: true,
+      },
+      {
+        label: "Pick Ban Bo3",
+        clickFunction: () => {
+          this.showChooseMapPopup = false;
+          router.push("/bestOfThree");
+        },
+        icon: "mdi-trophy",
+        color: "red",
+        dark: true,
+      },
+      {
+        label: "Online Pick Ban",
+        clickFunction: () => {
+          this.showChooseMapPopup = false;
+          router.push("/online");
+        },
+        icon: "mdi-web",
+        color: "red",
+        dark: true,
+      },
+      {
+        label: "Cancel",
+        clickFunction: () => (this.showChooseMapPopup = false),
+        icon: "mdi-undo-variant",
+        color: "",
+        dark: false,
+      },
+    ] as ActionPopupOptions[];
   },
 });
 </script>
 
 <style scoped lang="scss">
-.online-view-center {
-  display: block;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 1000px;
-}
 .team-select-text-input {
   font-size: 24px;
   padding-right: 8px;
@@ -345,12 +424,16 @@ export default Vue.extend({
 .list-complete-item {
   transition: all 1s;
 }
-.list-complete-enter, .list-complete-leave-to
-/* .list-complete-leave-active below version 2.1.8 */ {
+.list-complete-enter,
+.list-complete-leave-to {
   opacity: 0;
   transform: translateX(-30px);
 }
 .list-complete-leave-active {
   position: absolute;
+}
+
+.padding-top {
+  padding-top: 10px;
 }
 </style>
