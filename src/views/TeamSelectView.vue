@@ -17,7 +17,10 @@
 
       <v-row v-show="state === 0" no-gutters>
         <v-col cols="6">
-          <v-card class="grid-margin card-curved" :color="cardBackgroundColour">
+          <v-card
+            class="grid-margin card-curved card-bottom-padding"
+            :color="cardBackgroundColour"
+          >
             <div class="background-color-white-transparent">
               <v-img
                 :src="playerListImage"
@@ -35,7 +38,7 @@
               </v-img>
             </div>
             <v-list
-              :color="cardBackgroundColour"
+              color="rgba(0, 0, 0, 0)"
               class="overflow-y-auto"
               max-height="600"
             >
@@ -45,19 +48,25 @@
                   the text field on the right.
                 </i>
               </v-list-item>
-              <v-list-item v-for="(item, index) in playerNames" :key="index">
-                <v-list-item-avatar>
-                  <v-icon class="purple lighten-1" dark>mdi-account</v-icon>
-                </v-list-item-avatar>
-                <v-list-item-content>
-                  <v-list-item-title>{{ item }}</v-list-item-title>
-                </v-list-item-content>
-                <v-list-item-action>
-                  <v-btn icon @click="removePlayer(index)">
-                    <v-icon color="red">mdi-close</v-icon>
-                  </v-btn>
-                </v-list-item-action>
-              </v-list-item>
+              <transition-group name="list-complete" tag="p">
+                <v-list-item
+                  v-for="(item, index) in playerNames"
+                  :key="index"
+                  class="list-complete-item"
+                >
+                  <v-list-item-avatar>
+                    <v-icon class="purple lighten-1" dark>mdi-account</v-icon>
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>{{ item }}</v-list-item-title>
+                  </v-list-item-content>
+                  <v-list-item-action>
+                    <v-btn icon @click="removePlayer(index)">
+                      <v-icon color="red">mdi-close</v-icon>
+                    </v-btn>
+                  </v-list-item-action>
+                </v-list-item>
+              </transition-group>
             </v-list>
           </v-card>
         </v-col>
@@ -210,7 +219,7 @@ export default Vue.extend({
       backgroundImage: require("@/assets/backgrounds/range-bots.png"),
 
       windowHeight: window.innerHeight,
-      cardBackgroundColour: "rgba(255, 255, 255, 0.5)",
+      cardBackgroundColour: "rgba(255, 255, 255, 0.8",
 
       showRemovePlayersPopup: false,
       removeAllPlayersImage: require("@/assets/images/outside.png"),
@@ -317,6 +326,10 @@ export default Vue.extend({
   border-radius: 12px;
 }
 
+.card-bottom-padding {
+  padding-bottom: 40px;
+}
+
 .background-color-white-transparent {
   background-color: rgba(255, 255, 255, 0.5);
 }
@@ -327,5 +340,17 @@ export default Vue.extend({
 .subtitle-text {
   color: rgba(255, 255, 255, 1);
   // color: rgba(180, 180, 180, 0.9);
+}
+
+.list-complete-item {
+  transition: all 1s;
+}
+.list-complete-enter, .list-complete-leave-to
+/* .list-complete-leave-active below version 2.1.8 */ {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+.list-complete-leave-active {
+  position: absolute;
 }
 </style>
