@@ -2,8 +2,8 @@
   <Transition name="fade">
     <div class="backdrop" v-if="show">
       <div class="center-screen">
-        <v-card class="mx-auto" max-width="344">
-          <v-img :src="image" height="200px"></v-img>
+        <v-card class="mx-auto">
+          <v-img :src="image" height="400px"></v-img>
 
           <v-card-title> {{ title }} </v-card-title>
           <v-card-subtitle> {{ subtitle }} </v-card-subtitle>
