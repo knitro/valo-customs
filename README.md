@@ -32,3 +32,6 @@ This is a personal project Web App that supports Valorant players for their cust
   - Toggles to fill at least one of each slot
 - **Valorant Roulette**
   - Choosing either Attacker or Defender or Generic side strats
+- **Profiles**
+  - Show off stats in your custom games
+  - Revamped profile page
