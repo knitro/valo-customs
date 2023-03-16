@@ -14,11 +14,6 @@
           <div class="text-h4 title-text">
             {{ title }}
           </div>
-
-          <!-- <div>{{ subtitle }}</div>
-          <div class="text-h4 text--primary">
-            {{ title }}
-          </div> -->
         </v-card-text>
       </v-img>
     </div>
