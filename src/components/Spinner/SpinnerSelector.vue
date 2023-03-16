@@ -5,8 +5,8 @@
         class="spinner-selector-background"
         :src="backgroundImage"
         :key="backgroundImage"
-        :min-height="windowHeight - 64"
-        :max-height="windowHeight - 64"
+        :min-height="windowHeight"
+        :max-height="windowHeight"
       ></v-img>
     </Transition>
     <v-row>
@@ -282,7 +282,7 @@ export default Vue.extend({
 
 #spinner-selector-filters {
   position: absolute;
-  top: 80px;
+  top: 160px;
   right: 10px;
 }
 

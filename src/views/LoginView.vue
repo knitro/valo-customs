@@ -1,11 +1,12 @@
 <template>
   <div>
+    <app-bar-valo-custom title="Home"></app-bar-valo-custom>
     <v-img
       class="login-view-background"
       :src="backgroundImage"
       :key="backgroundImage"
-      :min-height="windowHeight - 64"
-      :max-height="windowHeight - 64"
+      :min-height="windowHeight"
+      :max-height="windowHeight"
     >
       <div class="login-view-center">
         <v-card dark color="rgba(103, 58, 183, 0.95)" width="500">
@@ -30,13 +31,14 @@ import Vue from "vue";
 import firebase from "firebase/compat/app";
 import * as firebaseui from "firebaseui";
 import "firebaseui/dist/firebaseui.css";
+import AppBarValoCustom from "@/components/AppBar/AppBarValoCustom.vue";
 
 // Compat Firebase Initialisation used for FirebaseUI
 import { firebaseConfig } from "@/firebase/firebase";
 
 export default Vue.extend({
   name: "LoginView",
-  components: {},
+  components: { AppBarValoCustom },
   data() {
     return {
       backgroundImage: require("@/assets/backgrounds/range-portal.png"),

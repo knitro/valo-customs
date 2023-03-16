@@ -1,11 +1,12 @@
 <template>
   <div>
+    <app-bar-valo-custom title="Home"></app-bar-valo-custom>
     <v-img
       class="login-view-background"
       :src="backgroundImage"
       :key="backgroundImage"
-      :min-height="windowHeight - 64"
-      :max-height="windowHeight - 64"
+      :min-height="windowHeight"
+      :max-height="windowHeight"
     >
       <div class="online-view-pick-ban-center" v-if="!isGaming">
         <v-card class="mx-auto" max-width="344" :loading="waitingForOpponent">
@@ -83,6 +84,7 @@ import {
   VCardText,
 } from "vuetify/lib";
 import PickBanSelectorOnline from "@/components/PickBan/PickBanSelectorOnline.vue";
+import AppBarValoCustom from "@/components/AppBar/AppBarValoCustom.vue";
 
 export default Vue.extend({
   name: "OnlinePickBanView",
@@ -96,6 +98,7 @@ export default Vue.extend({
     VDivider,
     VCardText,
     PickBanSelectorOnline,
+    AppBarValoCustom,
   },
   props: {
     id: String,

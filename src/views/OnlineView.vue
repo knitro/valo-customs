@@ -1,11 +1,12 @@
 <template>
   <div>
+    <app-bar-valo-custom title="Home"></app-bar-valo-custom>
     <v-img
       class="login-view-background"
       :src="backgroundImage"
       :key="backgroundImage"
-      :min-height="windowHeight - 64"
-      :max-height="windowHeight - 64"
+      :min-height="windowHeight"
+      :max-height="windowHeight"
     >
       <div class="online-view-center">
         <v-container>
@@ -106,11 +107,12 @@ import {
 import { Series, SeriesUser } from "@/firebase/database/database-interfaces";
 import { auth } from "@/firebase/firebase";
 import Vue from "vue";
+import AppBarValoCustom from "@/components/AppBar/AppBarValoCustom.vue";
 
 export default Vue.extend({
   name: "OnlineView",
 
-  components: {},
+  components: { AppBarValoCustom },
   data() {
     return {
       teamName: "",
