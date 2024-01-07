@@ -12,6 +12,9 @@
 <script lang="ts">
 import Vue from "vue";
 import SpinnerSelector from "./SpinnerSelector.vue";
+import { ALL_MAPS } from "@/data/map-data";
+import { SpinnerItem } from "./Spinner";
+import { PickBanData } from "../PickBan/PickBan";
 
 export default Vue.extend({
   name: "SpinnerValorant",
@@ -20,53 +23,14 @@ export default Vue.extend({
   },
   data() {
     return {
-      items: [
-        {
-          label: "Ascent",
-          image: require("@/assets/maps/ascent.webp"),
-          active: true,
-        },
-        {
-          label: "Bind",
-          image: require("@/assets/maps/bind.webp"),
-          active: false,
-        },
-        {
-          label: "Breeze",
-          image: require("@/assets/maps/breeze.webp"),
-          active: false,
-        },
-        {
-          label: "Fracture",
-          image: require("@/assets/maps/fracture.webp"),
-          active: true,
-        },
-        {
-          label: "Haven",
-          image: require("@/assets/maps/haven.webp"),
-          active: true,
-        },
-        {
-          label: "Icebox",
-          image: require("@/assets/maps/icebox.webp"),
-          active: true,
-        },
-        {
-          label: "Lotus",
-          image: require("@/assets/maps/lotus.webp"),
-          active: true,
-        },
-        {
-          label: "Pearl",
-          image: require("@/assets/maps/pearl.webp"),
-          active: true,
-        },
-        {
-          label: "Split",
-          image: require("@/assets/maps/split.webp"),
-          active: true,
-        },
-      ],
+      items: ALL_MAPS.map((currentMap: PickBanData) => {
+        const returnItem: SpinnerItem = {
+          label: currentMap.label,
+          image: currentMap.image,
+          active: currentMap.activeInComp,
+        };
+        return returnItem;
+      }),
       background: require("@/assets/maps/range.webp"),
     };
   },

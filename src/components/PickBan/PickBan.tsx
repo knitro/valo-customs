@@ -2,6 +2,7 @@ export interface PickBanData {
   label: string;
   image: string;
   minimap: string;
+  activeInComp: boolean;
 }
 
 export interface PickBanItem {
@@ -31,6 +32,7 @@ export const BLANK_PICK_BAN_ITEM: PickBanItem = {
     label: "",
     image: "",
     minimap: "",
+    activeInComp: false,
   },
   status: PickBanMapStatus.UNSELECTED,
   side: PickBanTeamSide.NOT_APPLICABLE,
