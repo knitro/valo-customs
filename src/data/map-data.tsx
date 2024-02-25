@@ -31,13 +31,13 @@ export const ALL_MAPS: PickBanData[] = [
     label: "Haven",
     image: require("@/assets/maps/haven.webp"),
     minimap: require("@/assets/minimaps/haven_minimap.webp"),
-    activeInComp: true,
+    activeInComp: false,
   },
   {
     label: "Icebox",
     image: require("@/assets/maps/icebox.webp"),
     minimap: require("@/assets/minimaps/icebox_minimap.webp"),
-    activeInComp: false,
+    activeInComp: true,
   },
   {
     label: "Lotus",
@@ -49,12 +49,18 @@ export const ALL_MAPS: PickBanData[] = [
     label: "Pearl",
     image: require("@/assets/maps/pearl.webp"),
     minimap: require("@/assets/minimaps/pearl_minimap.webp"),
-    activeInComp: true,
+    activeInComp: false,
   },
   {
     label: "Split",
     image: require("@/assets/maps/split.webp"),
     minimap: require("@/assets/minimaps/split_minimap.webp"),
+    activeInComp: true,
+  },
+  {
+    label: "Sunset",
+    image: require("@/assets/maps/sunset.webp"),
+    minimap: require("@/assets/minimaps/sunset_minimap.webp"),
     activeInComp: true,
   },
 ];
